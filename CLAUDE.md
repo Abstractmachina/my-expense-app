@@ -18,6 +18,7 @@ Expect new work to add expense entry and listing screens, and API calls to Paylo
 - Before starting any task that touches more than one file, summarize your plan in bullet points and wait for confirmation.
 - Use TypeScript's strict mode conventions throughout. No `any` types without a comment explaining why.
 - When adding new functions, include a JSDoc comment with param types and return type.
+- Add unit tests for every new function and integration tests for every new component. Put all tests under the root `__tests__/` folder, mirroring the `src/` path and named `[filename].test.ts` or `[filename].test.tsx` (e.g. `src/auth/payload.ts` → `__tests__/auth/payload.test.ts`, `src/app/setup.tsx` → `__tests__/app/setup.test.tsx`). Don't colocate tests under `src/app/`, since Expo Router treats every file there as a route.
 - Keep responses short. No preamble. Get to the output.
 - If a task is ambiguous, ask one clarifying question — not five.
 
@@ -36,7 +37,7 @@ Package manager is pnpm (`pnpm-lock.yaml`). Scripts are thin wrappers around `ex
 - `pnpm android` / `pnpm ios` / `pnpm web` — start with a specific target.
 - Type check: `pnpm exec tsc --noEmit` (currently passes clean). This is the only verification tool that works today.
 - `pnpm lint` does not work yet: there is no ESLint config and no ESLint dependency, so `expo lint` will prompt for setup.
-- No test runner is configured, so there is no single-test command.
+- `pnpm test` runs Jest (`jest-expo` preset). Single file: `pnpm test -- path/to/file.test.ts`. Pattern: `pnpm test -- -t "name"`.
 - `pnpm reset-project` moves the starter code out of `src/app`. Don't run it unless the user asks.
 
 ## Architecture
@@ -47,9 +48,10 @@ Package manager is pnpm (`pnpm-lock.yaml`). Scripts are thin wrappers around `ex
 
 - No key: renders `<Slot />` and redirects to `/setup` (`src/app/setup.tsx`), which saves the key to SecureStore.
 - Key present: renders `<AppTabs />` (`src/components/app-tabs.tsx`, a `NativeTabs` with `index` and `explore`) and redirects away from `/setup`.
-- Gotcha: the key is not re-checked after setup saves it, so the app stays on the setup screen until it restarts. Fix this in `_layout.tsx` (e.g. re-read the key or lift the state) before relying on the flow.
+- Setup verifies the key with `verifyApiKey()` (`src/auth/payload.ts`) before saving it. On success it calls `useApiKeySaved()` (`src/auth/api-key-context.tsx`), which the layout provides to set `hasKey` immediately, so no restart is needed.
+- The verify endpoint (`/api/verify-user`) is a placeholder until the Payload route exists.
 
-**Backend.** The intended backend is a Payload CMS API (referenced in comments in `setup.tsx`). `.env` defines `BACKEND_URL`, but nothing in `src` reads it yet, and the app makes no API calls today.
+**Backend.** The backend is Payload CMS. The app reads `EXPO_PUBLIC_BACKEND_URL` from `.env`; Expo only exposes `EXPO_PUBLIC_*` variables to client code. Currently only `verifyApiKey()` calls it, and the app has no other API calls.
 
 **Theming and platform split.**
 

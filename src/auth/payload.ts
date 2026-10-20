@@ -1,8 +1,6 @@
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
-// PLACEHOLDER: the backend endpoint doesn't exist yet. Replace the path and the
-// response shape once it does.
-const VERIFY_KEY_PATH = '/api/verify-key';
+const VERIFY_KEY_PATH = '/api/verify-user';
 
 /**
  * Checks an API key against the Payload backend before it is stored.
@@ -16,16 +14,18 @@ export async function verifyApiKey(key: string): Promise<boolean> {
     throw new Error('EXPO_PUBLIC_BACKEND_URL is not set');
   }
 
-  const res = await fetch(`${BACKEND_URL}${VERIFY_KEY_PATH}`, {
+  const endpoint = `${BACKEND_URL}${VERIFY_KEY_PATH}`;
+
+  const res = await fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ key }),
+    body: JSON.stringify({ apiKey:key }),
   });
 
   if (!res.ok) {
     return false;
   }
 
-  const body: { valid?: boolean } = await res.json();
-  return body.valid === true;
+  const result = await res.json();
+  return result;
 }

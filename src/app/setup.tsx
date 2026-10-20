@@ -16,7 +16,6 @@ export default function SetupScreen() {
       Alert.alert('Error', 'Please enter an API key');
       return;
     }
-
     setIsVerifying(true);
     try {
       const valid = await verifyApiKey(key);
