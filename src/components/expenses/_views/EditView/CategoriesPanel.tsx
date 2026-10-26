@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useContext, useRef, useState } from 'react';
-import { NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, Text, View } from 'react-native';
+import { NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, ScrollViewInstance, Text, View } from 'react-native';
 
 import { expenseCategoriesArray, type ExpenseCategory } from '../../_types/expenseCategories';
 import { cn } from '@/utilities/ui';
@@ -14,7 +14,7 @@ type Props = {};
 const CategoriesPanel = (props: Props) => {
   const ctx = useContext(EditViewContext);
   const [activeIndex, setActiveIndex] = useState(0);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
   const [pageWidth, setPageWidth] = useState(0);
 
   const paginatedCategories = chunkArray<ExpenseCategory>(expenseCategoriesArray, 9);

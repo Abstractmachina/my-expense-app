@@ -36,10 +36,10 @@ describe('SetupScreen', () => {
   it('stores the key and notifies the layout when the backend accepts it', async () => {
     (verifyApiKey as jest.Mock).mockResolvedValue(true);
     const onKeySaved = jest.fn();
-    renderSetup(onKeySaved);
+    await renderSetup(onKeySaved);
 
-    fireEvent.changeText(screen.getByPlaceholderText('Paste API Key here...'), '  secret  ');
-    fireEvent.press(screen.getByText('Save & Enter App'));
+    await fireEvent.changeText(screen.getByPlaceholderText('Paste API Key here...'), '  secret  ');
+    await fireEvent.press(screen.getByText('Save & Enter App'));
 
     await waitFor(() => expect(onKeySaved).toHaveBeenCalledTimes(1));
     expect(verifyApiKey).toHaveBeenCalledWith('secret');
@@ -50,10 +50,10 @@ describe('SetupScreen', () => {
     (verifyApiKey as jest.Mock).mockResolvedValue(false);
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
     const onKeySaved = jest.fn();
-    renderSetup(onKeySaved);
+    await renderSetup(onKeySaved);
 
-    fireEvent.changeText(screen.getByPlaceholderText('Paste API Key here...'), 'wrong');
-    fireEvent.press(screen.getByText('Save & Enter App'));
+    await fireEvent.changeText(screen.getByPlaceholderText('Paste API Key here...'), 'wrong');
+    await fireEvent.press(screen.getByText('Save & Enter App'));
 
     await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('Invalid key', expect.any(String)));
     expect(SecureStore.setItemAsync).not.toHaveBeenCalled();

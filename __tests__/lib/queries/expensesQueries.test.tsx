@@ -16,7 +16,7 @@ function wrapper({ children }: PropsWithChildren) {
 
 describe('useExpensesQuery', () => {
   it('resolves to an empty list until the endpoint exists', async () => {
-    const { result } = renderHook(() => useExpensesQuery(2026, 9), { wrapper });
+    const { result } = await renderHook(() => useExpensesQuery(2026, 9), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data).toEqual([]);

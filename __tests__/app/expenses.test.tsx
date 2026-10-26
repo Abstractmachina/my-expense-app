@@ -46,8 +46,8 @@ jest.mock('@/components/expenses/_views/EditView', () => ({
 }));
 
 describe('ExpensesScreen', () => {
-  it('shows the Expenses title and the two tabs, with the list selected first', () => {
-    render(<ExpensesScreen />);
+  it('shows the Expenses title and the two tabs, with the list selected first', async () => {
+    await render(<ExpensesScreen />);
 
     expect(screen.getByText('Expenses')).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'List' })).toBeTruthy();
@@ -57,14 +57,14 @@ describe('ExpensesScreen', () => {
     expect(screen.queryByText('edit view')).toBeNull();
   });
 
-  it('switches to the edit view when New is pressed and back to the list when saved', () => {
-    render(<ExpensesScreen />);
+  it('switches to the edit view when New is pressed and back to the list when saved', async () => {
+    await render(<ExpensesScreen />);
 
-    fireEvent.press(screen.getByRole('tab', { name: 'New' }));
+    await fireEvent.press(screen.getByRole('tab', { name: 'New' }));
     expect(screen.getByText('edit view')).toBeTruthy();
     expect(screen.queryByText('list view')).toBeNull();
 
-    fireEvent.press(screen.getByText('save stub'));
+    await fireEvent.press(screen.getByText('save stub'));
     expect(screen.getByText('list view')).toBeTruthy();
   });
 });

@@ -5,7 +5,7 @@ import { Colors } from '@/constants/theme';
 
 export default function AppTabs() {
   const scheme = useColorScheme();
-  const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
+  const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
 
   return (
     <NativeTabs
@@ -30,7 +30,7 @@ export default function AppTabs() {
 
       <NativeTabs.Trigger name="expenses">
         <NativeTabs.Trigger.Label>Expenses</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="creditcard" />
+        <NativeTabs.Trigger.Icon sf="creditcard" md="credit_card" />
       </NativeTabs.Trigger>
     </NativeTabs>
   );
