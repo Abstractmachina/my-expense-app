@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-`my-expense-app` is a mobile-first Expo (React Native) app for tracking personal expenses. It targets iOS, Android, and web from one codebase.
+`my-expense-app` is a mobile-first Expo (React Native) app for tracking personal expenses. It targets iOS and Android from one codebase.
 
 Current state: this is early-stage. The project is still the Expo starter template plus a working auth gate. The setup screen asks the user to paste a personal API key, which is stored on the device. There are no expense screens, data models, or backend calls yet. The intended backend is a Payload CMS instance that will hold the user's expense data.
 
@@ -34,7 +34,7 @@ Expect new work to add expense entry and listing screens, and API calls to Paylo
 Package manager is pnpm (`pnpm-lock.yaml`). Scripts are thin wrappers around `expo`.
 
 - `pnpm start` — Expo dev server; press `a`, `i`, or `w` in the terminal to open a target.
-- `pnpm android` / `pnpm ios` / `pnpm web` — start with a specific target.
+- `pnpm android` / `pnpm ios` — start with a specific target.
 - Type check: `pnpm exec tsc --noEmit` (currently passes clean). This is the only verification tool that works today.
 - `pnpm lint` does not work yet: there is no ESLint config and no ESLint dependency, so `expo lint` will prompt for setup.
 - `pnpm test` runs Jest (`jest-expo` preset). Single file: `pnpm test -- path/to/file.test.ts`. Pattern: `pnpm test -- -t "name"`.
@@ -47,7 +47,7 @@ Package manager is pnpm (`pnpm-lock.yaml`). Scripts are thin wrappers around `ex
 **Auth gate (the core flow).** `src/app/_layout.tsx` reads the SecureStore key `payload_api_key` once, on mount:
 
 - No key: renders `<Slot />` and redirects to `/setup` (`src/app/setup.tsx`), which saves the key to SecureStore.
-- Key present: renders `<AppTabs />` (`src/components/app-tabs.tsx`, a `NativeTabs` with `index` and `explore`) and redirects away from `/setup`.
+- Key present: renders `<AppTabs />` (`src/components/app-tabs.tsx`, a `NativeTabs` with `index`, `explore` and `expenses`) and redirects away from `/setup`.
 - Setup verifies the key with `verifyApiKey()` (`src/auth/payload.ts`) before saving it. On success it calls `useApiKeySaved()` (`src/auth/api-key-context.tsx`), which the layout provides to set `hasKey` immediately, so no restart is needed.
 - The verify endpoint (`/api/verify-user`) is a placeholder until the Payload route exists.
 
@@ -57,6 +57,6 @@ Package manager is pnpm (`pnpm-lock.yaml`). Scripts are thin wrappers around `ex
 
 - Design tokens live in `src/constants/theme.ts` (`Colors`, `Spacing`, `MaxContentWidth`, `BottomTabInset`).
 - Use `useTheme()` from `src/hooks/use-theme.ts` and the `ThemedText` / `ThemedView` components rather than hardcoded colors.
-- Platform-specific code uses `.web.ts` / `.web.tsx` siblings (e.g. `use-color-scheme`, `app-tabs`, `animated-icon`). Metro picks the right file per platform.
+- There is no web target. Don't add `.web.ts` / `.web.tsx` siblings; the deprecated ones (`app-tabs.web.tsx`, `animated-icon.web.tsx`, `use-color-scheme.web.ts`) are slated for manual removal.
 
 **Path aliases.** `@/*` maps to `src/*` and `@/assets/*` maps to `assets/*` (see `tsconfig.json`).

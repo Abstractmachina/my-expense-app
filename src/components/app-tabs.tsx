@@ -27,6 +27,11 @@ export default function AppTabs() {
           renderingMode="template"
         />
       </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="expenses">
+        <NativeTabs.Trigger.Label>Expenses</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="creditcard" />
+      </NativeTabs.Trigger>
     </NativeTabs>
   );
 }
