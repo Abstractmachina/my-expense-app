@@ -7,7 +7,7 @@ import { EditViewContext } from './EditViewContext';
 import { ExpenseTag } from '@/payload-types';
 import { chunkArray } from '@/utilities/arrays/chunkArray';
 import Carousel from '@/components/layout/Carousel';
-import { cn } from '@/utilities/ui';
+import { cn } from '@/util/ui';
 
 type Props = {
 };

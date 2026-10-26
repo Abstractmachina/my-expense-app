@@ -15,6 +15,9 @@ import * as SecureStore from 'expo-secure-store';
 import { ApiKeySavedContext } from '@/auth/api-key-context';
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import AppTabs from '@/components/app-tabs';
+import { PortalHost } from '@rn-primitives/portal';
+
+import '@/global.css';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -75,6 +78,7 @@ export default function RootLayout() {
       <ApiKeySavedContext.Provider value={() => setHasKey(true)}>
         {hasKey ? <AppTabs /> : <Slot />}
       </ApiKeySavedContext.Provider>
+      <PortalHost />
     </ThemeProvider>
   );
 }

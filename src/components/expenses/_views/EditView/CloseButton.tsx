@@ -1,6 +1,6 @@
 import { Button } from '@/components/shadcn/button';
-import { cn } from '@/utilities/ui';
-import { Loader, X } from 'lucide-react';
+import { cn } from '@/util/ui';
+import { Loader, X } from 'lucide-react-native';
 import { Link } from 'expo-router';
 
 

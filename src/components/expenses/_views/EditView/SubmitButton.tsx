@@ -1,10 +1,10 @@
 'use client';
 
-import { Check } from 'lucide-react';
+import { Check } from 'lucide-react-native';
 import { useContext } from 'react';
 import { EditViewContext } from './EditViewContext';
 import Loader from '@/components/animated/Loader';
-import { cn } from '@/utilities/ui';
+import { cn } from '@/util/ui';
 import { Button } from '@/components/shadcn/button';
 
 type Props = {

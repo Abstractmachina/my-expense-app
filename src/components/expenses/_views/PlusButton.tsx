@@ -1,8 +1,7 @@
 import { Button } from '@/components/shadcn/button';
-import { cn } from '@/utilities/ui';
-import { Plus } from 'lucide-react';
+import { cn } from '@/util/ui';
+import { Plus } from 'lucide-react-native';
 import { Link } from 'expo-router';
-import React from 'react';
 
 type Props = {
   className?: string;

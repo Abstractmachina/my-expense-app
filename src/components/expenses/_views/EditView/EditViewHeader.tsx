@@ -2,7 +2,7 @@
 
 import { Separator } from '@/components/shadcn/separator';
 import H2 from '@/components/style/H2';
-import { Check, X } from 'lucide-react';
+import { Check, X } from 'lucide-react-native';
 import { EditViewContext } from './EditViewContext';
 import { useContext } from 'react';
 import { View } from 'react-native';

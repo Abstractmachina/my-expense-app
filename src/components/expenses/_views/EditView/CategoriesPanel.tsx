@@ -4,7 +4,7 @@ import React, { useContext, useRef, useState } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, ScrollViewInstance, Text, View } from 'react-native';
 
 import { expenseCategoriesArray, type ExpenseCategory } from '../../_types/expenseCategories';
-import { cn } from '@/utilities/ui';
+import { cn } from '@/util/ui';
 import { EditViewContext } from './EditViewContext';
 import Collapsible from '@/components/layout/Collapsible';
 import { chunkArray } from '../../../../../utilities/arrays/chunkArray';
