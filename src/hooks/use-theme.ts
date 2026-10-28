@@ -1,3 +1,4 @@
+// DEPRECATED: colors now come from Tailwind classes (src/global.css). No longer used; safe to delete manually.
 /**
  * Learn more about light and dark modes:
  * https://docs.expo.dev/guides/color-schemes/

@@ -1,23 +1,23 @@
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, useColorScheme, View } from 'react-native';
-import { 
-  DarkTheme, 
-  DefaultTheme, 
-  ThemeProvider, 
-  useRouter, 
+import {
+  DarkTheme,
+  DefaultTheme, // <-- Added
+  Slot,
+  ThemeProvider,
+  useRootNavigationState,
+  useRouter,
   useSegments,
-  useRootNavigationState, // <-- Added
-  Slot // <-- Added
-} from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import * as SecureStore from 'expo-secure-store';
+} from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, useColorScheme, View } from "react-native";
 
-import { ApiKeySavedContext } from '@/auth/api-key-context';
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
-import { PortalHost } from '@rn-primitives/portal';
+import { ApiKeySavedContext } from "@/auth/api-key-context";
+import { AnimatedSplashOverlay } from "@/components/animated/animated-icon";
+import AppTabs from "@/components/app-tabs";
+import { PortalHost } from "@rn-primitives/portal";
 
-import '@/global.css';
+import "@/global.css";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,7 +25,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [isReady, setIsReady] = useState(false);
   const [hasKey, setHasKey] = useState(false);
-  
+
   const router = useRouter();
   const segments = useSegments();
   const navigationState = useRootNavigationState(); // <-- Added to check if router is awake
@@ -34,7 +34,7 @@ export default function RootLayout() {
   useEffect(() => {
     async function checkApiKey() {
       try {
-        const key = await SecureStore.getItemAsync('payload_api_key');
+        const key = await SecureStore.getItemAsync("payload_api_key");
         setHasKey(!!key);
       } catch (error) {
         setHasKey(false);
@@ -50,12 +50,12 @@ export default function RootLayout() {
     // Wait until our store check is done AND the router is fully mounted
     if (!isReady || !navigationState?.key) return;
 
-    const inSetupScreen = segments[0] === 'setup';
+    const inSetupScreen = segments[0] === "setup";
 
     if (!hasKey && !inSetupScreen) {
-      router.replace('/setup'); 
+      router.replace("/setup");
     } else if (hasKey && inSetupScreen) {
-      router.replace('/'); 
+      router.replace("/");
     } else {
       // If we don't need to redirect, hide the native splash screen!
       SplashScreen.hideAsync();
@@ -65,15 +65,15 @@ export default function RootLayout() {
   // Show a loading spinner while we check the SecureStore
   if (!isReady) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
       </View>
     );
   }
-  
+
   // Conditionally render the Setup screen OR the App Tabs based on auth state
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <AnimatedSplashOverlay />
       <ApiKeySavedContext.Provider value={() => setHasKey(true)}>
         {hasKey ? <AppTabs /> : <Slot />}

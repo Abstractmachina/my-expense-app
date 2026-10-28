@@ -28,6 +28,7 @@ Expect new work to add expense entry and listing screens, and API calls to Paylo
 - Don't install new npm packages without asking first. List what you'd install and why, then wait.
 <!-- - Never write inline styles. All styling goes through the design system tokens in /src/styles/tokens.ts. -->
 - Don't delete files. Mark them as deprecated with a comment instead, and flag them for manual removal.
+- All modifications need to follow the set coding style guide. If no project-specific file is found, use the default as set in VS Code.
 
 ## Commands
 

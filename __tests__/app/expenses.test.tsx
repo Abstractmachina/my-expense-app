@@ -2,6 +2,11 @@ import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import ExpensesScreen from '@/app/expenses';
 
+// lucide-react-native ships ES modules that Jest cannot load, so the icon is stubbed.
+jest.mock('lucide-react-native', () => ({ Plus: () => null, Triangle: () => null }));
+// rn-primitives ships untransformed ES modules that Jest cannot load, so Slot is stubbed as a pass-through.
+jest.mock('@rn-primitives/slot', () => ({ Slot: ({ children }: { children: React.ReactNode }) => children }));
+
 // The theme imports global.css, which Jest cannot parse, so the theme and themed components are stubbed.
 jest.mock('@/constants/theme', () => ({
   Spacing: { half: 2, one: 4, two: 8, three: 16, four: 24, five: 32, six: 64 },
