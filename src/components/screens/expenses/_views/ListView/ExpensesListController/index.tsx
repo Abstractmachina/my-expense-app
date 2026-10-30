@@ -12,6 +12,7 @@ import BatchOperationsPanel from './BatchOperations';
 import { useExpensesQuery } from '@/lib/queries/expensesQueries';
 import { useExpenseTagsQuery } from '@/lib/queries/expenseTagsQueries';
 import { Text, View } from 'react-native';
+import { ThemedText } from '@/components/styled-components/themed-text';
 
 
 type Props = {};
@@ -54,7 +55,7 @@ const ExpensesListController = ({}: Props) => {
   return (
     <>
       <View className="relative h-full px-4 sm:px-0">
-        <Text className="mb-8">Expenses</Text>
+        <ThemedText type="h1" className="mt-12">Expenses</ThemedText>
         <ControlPanel
           selectedMonth={selectedMonth}
           setSelectedMonth={setSelectedMonth}
@@ -63,9 +64,9 @@ const ExpensesListController = ({}: Props) => {
         />
         <Tabs value={selectedTab} className="" onValueChange={(value: string) => setSelectedTab(value)}>
           <TabsList className="w-full gap-2">
-            <TabsTrigger value="date">By Date</TabsTrigger>
-            <TabsTrigger value="category">By Category</TabsTrigger>
-            <TabsTrigger value="batch">Batch Operations</TabsTrigger>
+            <TabsTrigger value="date"><ThemedText>By Date</ThemedText></TabsTrigger>
+            <TabsTrigger value="category"><ThemedText>By Category</ThemedText></TabsTrigger>
+            <TabsTrigger value="batch"><ThemedText>Batch Operations</ThemedText></TabsTrigger>
           </TabsList>
           <TabsContent value="date">
             {loading ? (

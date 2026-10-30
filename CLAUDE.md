@@ -2,8 +2,6 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-@AGENTS.md
-
 ## Project overview
 
 `my-expense-app` is a mobile-first Expo (React Native) app for tracking personal expenses. It targets iOS and Android from one codebase.

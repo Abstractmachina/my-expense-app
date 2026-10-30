@@ -1,6 +1,7 @@
 import Collapsible from '@/components/layout/Collapsible';
 import React, { useContext, useMemo } from 'react';
 import { Pressable, Text } from 'react-native';
+import { ThemedText } from '@/components/styled-components/themed-text';
 import { EditViewContext } from './EditViewContext';
 import { ExpenseTag } from '@/payload-types';
 import { chunkArray } from '@/util/arrays/chunkArray';
@@ -30,7 +31,7 @@ const TagsPanel = ({ }: Props) => {
   return (
     <Collapsible.Item>
       <Collapsible.Header className="flex justify-between">
-        <Text>Tags</Text> <Text>{ctx?.selectedTag?.name}</Text>
+        <ThemedText>Tags</ThemedText><ThemedText>{ctx?.selectedTag?.name}</ThemedText>
       </Collapsible.Header>
       <Collapsible.Content className="">
 

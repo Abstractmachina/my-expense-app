@@ -1,17 +1,15 @@
 import { Toaster } from '@/components/rnr/sonner';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren } from 'react';
 
 type Props = {};
 
+// The QueryClient now comes from the root layout; this only adds the toast host for the form.
 const Providers = ({ children }: Props & PropsWithChildren) => {
-  const [queryClient] = useState(() => new QueryClient());
-
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       {children}
       <Toaster />
-    </QueryClientProvider>
+    </>
   );
 };
 

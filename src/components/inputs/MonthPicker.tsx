@@ -1,5 +1,6 @@
 import { Triangle } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
+import { ThemedText } from "../styled-components/themed-text";
 
 type Props = {
   selectedMonth: number;
@@ -41,9 +42,9 @@ const MonthPicker = ({selectedMonth, setSelectedMonth, selectedYear, setSelected
 					<Triangle size={16} color="#3f3f46" fill="#3f3f46" />
 				</View>
 			</Pressable>
-			<Text className="w-40 text-center">
+			<ThemedText className="w-40 text-center">
 				{months[selectedMonth]} {selectedYear}
-			</Text>
+			</ThemedText>
 			{/* The next arrow is hidden on the current month, so the user cannot go into the future. */}
 			{!isCurrentMonth && (
 				<Pressable onPress={handleIncrease} accessibilityRole="button" accessibilityLabel="Next month">

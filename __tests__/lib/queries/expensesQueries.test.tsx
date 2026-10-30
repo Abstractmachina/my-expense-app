@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react-native';
 import React, { PropsWithChildren } from 'react';
 
-import { useExpensesQuery } from '@/lib/queries/expensesQueries';
+import { useExpenseQuery, useExpensesQuery } from '@/lib/queries/expensesQueries';
 
 /**
  * Wraps a hook in a fresh react-query client.

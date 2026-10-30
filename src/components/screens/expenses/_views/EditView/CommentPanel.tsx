@@ -1,6 +1,7 @@
 import { Textarea } from '@/components/inputs/TextArea';
 import Collapsible from '@/components/layout/Collapsible';
 import React, { useContext } from 'react';
+import { ThemedText } from '@/components/styled-components/themed-text';
 import { EditViewContext } from './EditViewContext';
 
 type Props = {};
@@ -13,7 +14,9 @@ const CommentPanel = (props: Props) => {
   }
   return (
     <Collapsible.Item>
-      <Collapsible.Header className="flex justify-start">Comment</Collapsible.Header>
+      <Collapsible.Header className="flex justify-start">
+        <ThemedText>Comment</ThemedText>
+      </Collapsible.Header>
       <Collapsible.Content>
         <Textarea
           className="w-full min-h-20"

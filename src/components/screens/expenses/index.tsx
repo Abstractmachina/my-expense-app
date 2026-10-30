@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 
@@ -5,65 +6,37 @@ import { ThemedText } from "@/components/styled-components/themed-text";
 import { ThemedView } from "@/components/styled-components/themed-view";
 import { cn } from "@/util/ui";
 import ExpensesListView from "./_views/ListView";
-import EditView from "./_views/EditView";
 import PlusButton from "./_views/PlusButton";
 
-type ExpensesTab = "list" | "new";
+type ExpensesTab = "date" | "category" | "batch";
 
 const TABS: { value: ExpensesTab; label: string }[] = [
-  { value: "list", label: "List" },
-  { value: "new", label: "New" },
+  { value: "date", label: "By Date" },
+  { value: "category", label: "By Category" },
+  { value: "batch", label: "Batch Operations" },
 ];
 
 /**
- * The Expenses screen: a title and two tabs, the monthly list and the new-expense form.
+ * The Expenses screen: 3 tabs: date, category, batch operations
+ * Add button brings the user to the edit expense screen
  *
  * @returns The screen element.
  */
 export default function ExpensesScreen() {
-  const [tab, setTab] = useState<ExpensesTab>("list");
+  const router = useRouter();
+  // const [tab, setTab] = useState<ExpensesTab>("date");
 
   return (
     <ThemedView className="flex-1 gap-4 p-4">
-      <ThemedText type="h1">Expenses</ThemedText>
 
-      <ThemedView type="backgroundElement" className="flex-row rounded-2xl p-1">
-        {TABS.map(({ value, label }) => {
-          const selected = tab === value;
-          return (
-            <Pressable
-              key={value}
-              onPress={() => setTab(value)}
-              accessibilityRole="tab"
-              accessibilityState={{ selected }}
-              className={cn(
-                "flex-1 items-center rounded-2xl py-2",
-                selected && "bg-[rgba(127,127,127,0.25)]",
-              )}
-            >
-              <ThemedText type="smallBold">{label}</ThemedText>
-            </Pressable>
-          );
-        })}
-      </ThemedView>
-
-      {tab === "list" ? (
-        <ExpensesListView />
-      ) : (
-        <EditView
-          onSaved={() => setTab("list")}
-          onClose={() => setTab("list")}
+      <ExpensesListView />
+      
+      <View pointerEvents="box-none" className="absolute inset-0">
+        <PlusButton
+          onPress={() => router.push({ pathname: "/edit-expense/[[...id]]" })}
+          className="absolute bottom-12 left-8 z-50"
         />
-      )}
-
-      {tab === "list" && (
-        <View pointerEvents="box-none" className="absolute inset-0">
-          <PlusButton
-            onPress={() => setTab("new")}
-            className="absolute bottom-12 left-8 z-50"
-          />
-        </View>
-      )}
+      </View>
     </ThemedView>
   );
 }

@@ -2,6 +2,7 @@ import {
   DarkTheme,
   DefaultTheme, // <-- Added
   Slot,
+  Stack,
   ThemeProvider,
   useRootNavigationState,
   useRouter,
@@ -11,15 +12,18 @@ import * as SecureStore from "expo-secure-store";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, useColorScheme, View } from "react-native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ApiKeySavedContext } from "@/auth/api-key-context";
 import { AnimatedSplashOverlay } from "@/components/animated/animated-icon";
-import AppTabs from "@/components/app-tabs";
 import { PortalHost } from "@rn-primitives/portal";
 
 import "@/global.css";
 
 SplashScreen.preventAutoHideAsync();
+
+// One client for the whole app, so every screen's queries share the same cache.
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -73,12 +77,22 @@ export default function RootLayout() {
 
   // Conditionally render the Setup screen OR the App Tabs based on auth state
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <ApiKeySavedContext.Provider value={() => setHasKey(true)}>
-        {hasKey ? <AppTabs /> : <Slot />}
-      </ApiKeySavedContext.Provider>
-      <PortalHost />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <AnimatedSplashOverlay />
+        <ApiKeySavedContext.Provider value={() => setHasKey(true)}>
+          {hasKey ? (
+            // The tab group and the add/edit route both live in this stack, so the route is reachable from the tabs.
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="edit-expense/[[...id]]" options={{ presentation: "modal" }} />
+            </Stack>
+          ) : (
+            <Slot />
+          )}
+        </ApiKeySavedContext.Provider>
+        <PortalHost />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

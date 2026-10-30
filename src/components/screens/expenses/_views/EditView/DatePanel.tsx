@@ -2,7 +2,8 @@ import DatePicker from '@/components/inputs/DatePicker';
 import Collapsible from '@/components/layout/Collapsible';
 import { useContext, useMemo } from 'react';
 import { EditViewContext } from './EditViewContext';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { ThemedText } from '@/components/styled-components/themed-text';
 
 type Props = {};
 
@@ -20,7 +21,7 @@ const DatePanel = (props: Props) => {
   return (
     <Collapsible.Item>
       <Collapsible.Header className="flex justify-between">
-        <Text>Date</Text> <Text>{processedDate?.toLocaleDateString() || ''}</Text>
+        <ThemedText>Date</ThemedText><ThemedText>{processedDate?.toLocaleDateString() || ''}</ThemedText>
       </Collapsible.Header>
       <Collapsible.Content>
         <View className="flex justify-center">

@@ -1,6 +1,7 @@
 import { useContext, useRef, useState } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, ScrollViewInstance, Text, View } from 'react-native';
 
+import { ThemedText } from '@/components/styled-components/themed-text';
 import { cn } from '@/util/ui';
 import { EditViewContext } from './EditViewContext';
 import Collapsible from '@/components/layout/Collapsible';
@@ -37,7 +38,7 @@ const CategoriesPanel = (props: Props) => {
   return (
     <Collapsible.Item>
       <Collapsible.Header className="flex justify-between">
-        <Text>Category</Text> <Text>{ctx?.selectedCategory?.label}</Text>
+        <ThemedText>Category</ThemedText><ThemedText>{ctx?.selectedCategory?.label}</ThemedText>
       </Collapsible.Header>
 
       <Collapsible.Content>
