@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 
-import EditView from "@/components/screens/expenses/_views/EditView";
+import EditView from "@/components/screens/edit-expense/EditView";
 import { useExpenseQuery } from "@/lib/queries/expensesQueries";
 import { ThemedView } from "@/components/styled-components/themed-view";
 import { ThemedText } from "@/components/styled-components/themed-text";

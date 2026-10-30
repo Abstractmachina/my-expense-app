@@ -1,12 +1,9 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { ThemedText } from "@/components/styled-components/themed-text";
-import { ThemedView } from "@/components/styled-components/themed-view";
-import { cn } from "@/util/ui";
-import ExpensesListView from "./_views/ListView";
-import PlusButton from "./_views/PlusButton";
+import ExpensesListController from "./components/ExpensesListController";
+import PlusButton from "./components/PlusButton";
 
 type ExpensesTab = "date" | "category" | "batch";
 
@@ -27,16 +24,15 @@ export default function ExpensesScreen() {
   // const [tab, setTab] = useState<ExpensesTab>("date");
 
   return (
-    <ThemedView className="flex-1 gap-4 p-4">
+    <SafeAreaView className="flex-1 gap-4 p-4">
+      <ExpensesListController />
 
-      <ExpensesListView />
-      
       <View pointerEvents="box-none" className="absolute inset-0">
         <PlusButton
           onPress={() => router.push({ pathname: "/edit-expense/[[...id]]" })}
           className="absolute bottom-12 left-8 z-50"
         />
       </View>
-    </ThemedView>
+    </SafeAreaView>
   );
 }

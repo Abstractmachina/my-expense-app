@@ -1,26 +1,34 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from "react";
 
-import { Expense, ExpenseTag } from '@/payload-types';
+import { Expense, ExpenseTag } from "@/payload-types";
 
-import ExpensesListTable from './ExpensesListTable';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/rnr/tabs';
-import { formatDateTime, isEqualToformattedDates } from '@/util/formatDateTime';
-import { getTotal } from '@/util/math/getTotal';
-import Loader from '@/components/animated/Loader';
-import ControlPanel from './ControlPanel';
-import BatchOperationsPanel from './BatchOperations';
-import { useExpensesQuery } from '@/lib/queries/expensesQueries';
-import { useExpenseTagsQuery } from '@/lib/queries/expenseTagsQueries';
-import { Text, View } from 'react-native';
-import { ThemedText } from '@/components/styled-components/themed-text';
-
+import Loader from "@/components/animated/Loader";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/rnr/tabs";
+import { ThemedText } from "@/components/styled-components/themed-text";
+import { useExpensesQuery } from "@/lib/queries/expensesQueries";
+import { useExpenseTagsQuery } from "@/lib/queries/expenseTagsQueries";
+import { formatDateTime, isEqualToformattedDates } from "@/util/formatDateTime";
+import { getTotal } from "@/util/math/getTotal";
+import { Text, View } from "react-native";
+import BatchOperationsPanel from "./BatchOperations";
+import ControlPanel from "./ControlPanel";
+import ExpensesListTable from "./ExpensesListTable";
 
 type Props = {};
 
 const ExpensesListController = ({}: Props) => {
-  const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth());
-  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
-  const [selectedTab, setSelectedTab] = useState<string>('date');
+  const [selectedMonth, setSelectedMonth] = useState<number>(
+    new Date().getMonth(),
+  );
+  const [selectedYear, setSelectedYear] = useState<number>(
+    new Date().getFullYear(),
+  );
+  const [selectedTab, setSelectedTab] = useState<string>("date");
 
   const expensesQuery = useExpensesQuery(selectedYear, selectedMonth);
   const expenseTagsQuery = useExpenseTagsQuery();
@@ -33,8 +41,10 @@ const ExpensesListController = ({}: Props) => {
     else setLoading(true);
   }, [expensesQuery.data, expenseTagsQuery.data]);
 
-  const sortedExpensesByDate = useMemo<Map<string, Expense[]> | undefined>(() => {
-    if (selectedTab === 'category') return undefined;
+  const sortedExpensesByDate = useMemo<
+    Map<string, Expense[]> | undefined
+  >(() => {
+    if (selectedTab === "category") return undefined;
 
     const results =
       expensesQuery.data && expenseTagsQuery.data
@@ -44,10 +54,14 @@ const ExpensesListController = ({}: Props) => {
     return results;
   }, [expensesQuery.data, expenseTagsQuery.data, selectedTab]);
 
-  const sortedExpensesByCategory = useMemo<Map<string, Map<string, Expense[]>> | undefined>(() => {
-    if (selectedTab === 'date') return undefined;
+  const sortedExpensesByCategory = useMemo<
+    Map<string, Map<string, Expense[]>> | undefined
+  >(() => {
+    if (selectedTab === "date") return undefined;
 
-    const results = expensesQuery.data ? _sortExpensesByCategory(expensesQuery.data) : undefined;
+    const results = expensesQuery.data
+      ? _sortExpensesByCategory(expensesQuery.data)
+      : undefined;
     setLoading(false);
     return results;
   }, [expensesQuery.data, selectedTab]);
@@ -55,18 +69,30 @@ const ExpensesListController = ({}: Props) => {
   return (
     <>
       <View className="relative h-full px-4 sm:px-0">
-        <ThemedText type="h1" className="mt-12">Expenses</ThemedText>
+        <ThemedText type="h1" className="">
+          Expenses
+        </ThemedText>
         <ControlPanel
           selectedMonth={selectedMonth}
           setSelectedMonth={setSelectedMonth}
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
         />
-        <Tabs value={selectedTab} className="" onValueChange={(value: string) => setSelectedTab(value)}>
+        <Tabs
+          value={selectedTab}
+          className=""
+          onValueChange={(value: string) => setSelectedTab(value)}
+        >
           <TabsList className="w-full gap-2">
-            <TabsTrigger value="date"><ThemedText>By Date</ThemedText></TabsTrigger>
-            <TabsTrigger value="category"><ThemedText>By Category</ThemedText></TabsTrigger>
-            <TabsTrigger value="batch"><ThemedText>Batch Operations</ThemedText></TabsTrigger>
+            <TabsTrigger value="date">
+              <ThemedText>By Date</ThemedText>
+            </TabsTrigger>
+            <TabsTrigger value="category">
+              <ThemedText>By Category</ThemedText>
+            </TabsTrigger>
+            <TabsTrigger value="batch">
+              <ThemedText>Batch Operations</ThemedText>
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="date">
             {loading ? (
@@ -77,7 +103,7 @@ const ExpensesListController = ({}: Props) => {
               <ExpensesListTable
                 expensesByDate={sortedExpensesByDate}
                 expensesByCategory={sortedExpensesByCategory}
-                sortBy={'date'}
+                sortBy={"date"}
               />
             )}
           </TabsContent>
@@ -88,7 +114,7 @@ const ExpensesListController = ({}: Props) => {
               <ExpensesListTable
                 expensesByDate={sortedExpensesByDate}
                 expensesByCategory={sortedExpensesByCategory}
-                sortBy={'category'}
+                sortBy={"category"}
               />
             )}
           </TabsContent>
@@ -110,7 +136,7 @@ function _orderExpensesByDay(input: Expense[], tags: ExpenseTag[]) {
     let expense = input[i];
     if (!expense) continue;
 
-    if (typeof expense.tag === 'string') {
+    if (typeof expense.tag === "string") {
       // fetch full document.
       const fullTag = tags.find((tag) => tag.id === expense?.tag);
       if (fullTag) expense = { ...expense, tag: fullTag };
@@ -129,29 +155,36 @@ function _orderExpensesByDay(input: Expense[], tags: ExpenseTag[]) {
   return sortedMap;
 }
 
-function _getExpensesByDate(map: Map<string, Expense[]>, date: string): Expense[] | undefined {
+function _getExpensesByDate(
+  map: Map<string, Expense[]>,
+  date: string,
+): Expense[] | undefined {
   for (const k of map.keys()) {
     const equal = isEqualToformattedDates(date, k);
     if (equal) return map.get(k);
   }
 }
 
-function _sortExpensesByCategory(input: Expense[]): Map<string, Map<string, Expense[]>> {
+function _sortExpensesByCategory(
+  input: Expense[],
+): Map<string, Map<string, Expense[]>> {
   const output = new Map<string, Map<string, Expense[]>>();
 
   for (let i = 0; i < input.length; i++) {
     const expense = input[i];
     if (!expense) continue;
     const hasTag =
-      typeof expense.tag !== 'string' && expense.tag !== null && expense.tag !== undefined;
-    const tag = hasTag ? (expense.tag as ExpenseTag).name : 'Untagged';
+      typeof expense.tag !== "string" &&
+      expense.tag !== null &&
+      expense.tag !== undefined;
+    const tag = hasTag ? (expense.tag as ExpenseTag).name : "Untagged";
 
     // sort expenses into map
     const foundCategoryMap = _getExpensesByCategory(output, expense.category);
     if (foundCategoryMap) {
       const foundTagArray = _getExpensesByTag(
         foundCategoryMap,
-        (expense.tag as ExpenseTag)?.name || '',
+        (expense.tag as ExpenseTag)?.name || "",
       );
       if (foundTagArray) {
         // category exists, tag exists.
@@ -163,7 +196,10 @@ function _sortExpensesByCategory(input: Expense[]): Map<string, Map<string, Expe
     } else {
       //category does not exist => create new category map and new tag array.
 
-      output.set(expense.category, new Map<string, Expense[]>([[tag, [expense]]]));
+      output.set(
+        expense.category,
+        new Map<string, Expense[]>([[tag, [expense]]]),
+      );
     }
   }
 
@@ -211,7 +247,10 @@ function _getExpensesByCategory(
   }
 }
 
-function _getExpensesByTag(map: Map<string, Expense[]>, tag: string): Expense[] | undefined {
+function _getExpensesByTag(
+  map: Map<string, Expense[]>,
+  tag: string,
+): Expense[] | undefined {
   for (const k of map.keys()) {
     if (k === tag) return map.get(k);
   }

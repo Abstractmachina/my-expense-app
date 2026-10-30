@@ -7,6 +7,7 @@ import { HintRow } from "@/components/hint-row";
 import { ThemedText } from "@/components/styled-components/themed-text";
 import { ThemedView } from "@/components/styled-components/themed-view";
 import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
+import Overview from "@/components/screens/Overview";
 
 function getDevMenuHint() {
   if (Device.isDevice) {
@@ -28,7 +29,8 @@ export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
+        <Overview />
+        {/* <ThemedView style={styles.heroSection}>
           <AnimatedIcon />
           <ThemedText type="h1" style={styles.title}>
             Welcome to&nbsp;Expohhhhaa
@@ -49,7 +51,7 @@ export default function HomeScreen() {
             title="Fresh start"
             hint={<ThemedText type="code">npm run reset-project</ThemedText>}
           />
-        </ThemedView>
+        </ThemedView> */}
       </SafeAreaView>
     </ThemedView>
   );
