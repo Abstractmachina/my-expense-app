@@ -56,6 +56,20 @@ export const THEME = {
     chart3: "hsl(30 80% 55%)",
     chart4: "hsl(280 65% 60%)",
     chart5: "hsl(340 75% 55%)",
+    // Palette (hex). Not CSS variables; mirrors the colors in tailwind.config.js, checked by the theme test.
+    "bg-700": "#242424",
+    "bg-800": "#141414",
+    "fg-800": "#fcfcfc",
+    "primary-100": "#94d2bd",
+    "primary-200": "#0a9396",
+    "primary-300": "#005f73",
+    "primary-400": "#001219",
+    "secondary-100": "#e9d8a6",
+    "secondary-200": "#ee9b00",
+    "secondary-300": "#ca6702",
+    "secondary-400": "#bb3e03",
+    "secondary-500": "#ae2012",
+    "secondary-600": "#9b2226",
   },
 };
 
