@@ -1,94 +1,32 @@
-import * as Device from "expo-device";
-import { Platform, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from "@/components/animated/animated-icon";
-import { HintRow } from "@/components/hint-row";
 import { ThemedText } from "@/components/styled-components/themed-text";
 import { ThemedView } from "@/components/styled-components/themed-view";
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
 import Overview from "@/components/screens/Overview";
-
-function getDevMenuHint() {
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === "android" ? "cmd+m (or ctrl+m)" : "cmd+d";
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import { useEffect, useState } from "react";
+import * as SecureStore from "expo-secure-store"
 
 export default function HomeScreen() {
+
+  const [name, setName] = useState<string | null>(null);
+
+useEffect(() => {
+  SecureStore.getItemAsync("user_name").then(setName);
+}, []);
+  
+  
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <Overview />
-        {/* <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="h1" style={styles.title}>
-            Welcome to&nbsp;Expohhhhaa
-          </ThemedText>
+    <ThemedView className="">
+      {/* Bottom padding clears the tab bar: BottomTabInset (50 iOS / 80 Android) + Spacing.three (16). */}
+      <SafeAreaView className="gap-4 px-6">
+        <ThemedView>
+          <ThemedText type="h1">Overview</ThemedText>
+          <ThemedText>Hi, {name}</ThemedText>
+
         </ThemedView>
+        <Overview />
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/(tabs)/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView> */}
       </SafeAreaView>
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    flexDirection: "row",
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: "center",
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: "center",
-  },
-  code: {
-    textTransform: "uppercase",
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: "stretch",
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});

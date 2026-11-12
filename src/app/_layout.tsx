@@ -38,7 +38,7 @@ export default function RootLayout() {
   useEffect(() => {
     async function checkApiKey() {
       try {
-        const key = await SecureStore.getItemAsync("payload_api_key");
+        const key = await SecureStore.getItemAsync("backend_api_key");
         setHasKey(!!key);
       } catch (error) {
         setHasKey(false);

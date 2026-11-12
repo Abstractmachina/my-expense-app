@@ -14,7 +14,7 @@ import { useExpensesQuery } from "@/lib/queries/expensesQueries";
 import { useExpenseTagsQuery } from "@/lib/queries/expenseTagsQueries";
 import { formatDateTime, isEqualToformattedDates } from "@/util/formatDateTime";
 import { getTotal } from "@/util/math/getTotal";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import BatchOperationsPanel from "./BatchOperations";
 import ControlPanel from "./ControlPanel";
 import ExpensesListTable from "./ExpensesListTable";
@@ -66,12 +66,16 @@ const ExpensesListController = ({}: Props) => {
     return results;
   }, [expensesQuery.data, selectedTab]);
 
+  console.log("sortedExpensesByCategory", expensesQuery.data?.length);
+
   return (
     <>
-      <View className="relative h-full px-4 sm:px-0">
+      <View className="relative flex-1 flex-col px-4 sm:px-0">
         <ThemedText type="h1" className="">
           Expenses
         </ThemedText>
+        {/* <ThemedText>{ selectedMonth } {selectedYear}</ThemedText> */}
+        {/* <ThemedText>{ expensesQuery.status } {expensesQuery.data?.length}</ThemedText> */}
         <ControlPanel
           selectedMonth={selectedMonth}
           setSelectedMonth={setSelectedMonth}
@@ -80,7 +84,7 @@ const ExpensesListController = ({}: Props) => {
         />
         <Tabs
           value={selectedTab}
-          className=""
+          className="flex-1"
           onValueChange={(value: string) => setSelectedTab(value)}
         >
           <TabsList className="w-full gap-2">
@@ -94,6 +98,9 @@ const ExpensesListController = ({}: Props) => {
               <ThemedText>Batch Operations</ThemedText>
             </TabsTrigger>
           </TabsList>
+
+      <ScrollView className="flex-1" contentContainerClassName="pb-32">
+
           <TabsContent value="date">
             {loading ? (
               <View className="w-full h-96 flex justify-center items-center">
@@ -109,7 +116,9 @@ const ExpensesListController = ({}: Props) => {
           </TabsContent>
           <TabsContent value="category">
             {loading ? (
-              <Text>... Loading ...</Text>
+              <View className="w-full h-96 flex justify-center items-center">
+                <Loader />
+              </View>
             ) : (
               <ExpensesListTable
                 expensesByDate={sortedExpensesByDate}
@@ -120,7 +129,10 @@ const ExpensesListController = ({}: Props) => {
           </TabsContent>
           <TabsContent value="batch">
             <BatchOperationsPanel />
-          </TabsContent>
+            </TabsContent>
+            
+      </ScrollView>
+
         </Tabs>
       </View>
     </>
@@ -128,6 +140,7 @@ const ExpensesListController = ({}: Props) => {
 };
 
 export default ExpensesListController;
+
 
 function _orderExpensesByDay(input: Expense[], tags: ExpenseTag[]) {
   const output = new Map<string, Expense[]>();

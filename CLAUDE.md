@@ -17,6 +17,7 @@ Expect new work to add expense entry and listing screens, and API calls to Paylo
 - Use TypeScript's strict mode conventions throughout. No `any` types without a comment explaining why.
 - When adding new functions, include a JSDoc comment with param types and return type.
 - Add unit tests for every new function and integration tests for every new component. Put all tests under the root `__tests__/` folder, mirroring the `src/` path and named `[filename].test.ts` or `[filename].test.tsx` (e.g. `src/auth/payload.ts` → `__tests__/auth/payload.test.ts`, `src/app/setup.tsx` → `__tests__/app/setup.test.tsx`). Don't colocate tests under `src/app/`, since Expo Router treats every file there as a route.
+- if you work on existing code and you notice that tests are missing, notify the user and propose to add tests.
 - Keep responses short. No preamble. Get to the output.
 - If a task is ambiguous, ask one clarifying question — not five.
 

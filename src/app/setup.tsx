@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
@@ -18,13 +18,16 @@ export default function SetupScreen() {
     }
     setIsVerifying(true);
     try {
-      const valid = await verifyApiKey(key);
-      if (!valid) {
+      const res = await verifyApiKey(key);
+      console.log('valid', res);
+      if (!res.verified) {
         Alert.alert('Invalid key', 'The server rejected this API key.');
         return;
       }
 
-      await SecureStore.setItemAsync('payload_api_key', key);
+      await SecureStore.setItemAsync('backend_api_key', key);
+      await SecureStore.setItemAsync('user_name', res.name || "");
+      await SecureStore.setItemAsync('user_email', res.email || "");
       onKeySaved();
     } catch (error) {
       Alert.alert('Error', 'Could not verify the key. Check your connection and try again.');

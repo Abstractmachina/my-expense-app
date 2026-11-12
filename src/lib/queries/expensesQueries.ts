@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import type { Expense } from '@/payload-types';
+import { fetchExpenses } from '../fetchers/expensesFetchers';
 
 /**
  * Loads one expense for the edit screen. Placeholder: resolves to null until the endpoint exists.
@@ -28,6 +29,10 @@ export function useExpensesQuery(year: number, month: number) {
   return useQuery<Expense[]>({
     queryKey: ['expenses', year, month],
     // shortcut: returns [] instead of calling Payload, replace with the real fetch once the endpoint exists
-    queryFn: async () => [],
-  });
+    queryFn: async () => {
+      const res = await fetchExpenses({ year, month });
+      if (!res || res.length === 0) return [];
+      return res;
+    }
+    });
 }
