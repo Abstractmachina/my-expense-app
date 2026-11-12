@@ -1,4 +1,5 @@
 import { Button } from '@/components/rnr/button';
+import { THEME } from '@/lib/theme';
 import { cn } from '@/util/ui';
 import { Loader, X } from 'lucide-react-native';
 
@@ -17,14 +18,14 @@ const CloseButton = ({className, variant, onPress}:Props) => {
     <Button
       onPress={onPress}
       className={cn(
-        'w-full flex justify-center p-8 hover:cursor-pointer rounded-none border-none',
-        variant === 'small' && 'w-auto p-8 bg-my-bg-800 hover:bg-my-bg-700',
+        'flex justify-center p-8 hover:cursor-pointer rounded-none border-none',
+        variant === 'small' && 'p-8 bg-',
         className,
       )}
       // onClick={handleSubmit}
       // disabled={ctx?.isSaving}
     >
-      {false ? <Loader size={23} /> : <X />}
+      {false ? <Loader size={23} /> : <X color={THEME.dark['fg-800']} />}
     </Button>
   )
 }

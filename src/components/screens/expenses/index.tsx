@@ -24,8 +24,8 @@ export default function ExpensesScreen() {
   // const [tab, setTab] = useState<ExpensesTab>("date");
 
   return (
-    <SafeAreaView className="flex-1 gap-4 p-4">
-      <ExpensesListController />
+    <SafeAreaView className="flex-1 gap-4">
+        <ExpensesListController />
 
       <View pointerEvents="box-none" className="absolute inset-0">
         <PlusButton

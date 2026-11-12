@@ -6,6 +6,7 @@ import { formatDateTime } from "@/util/formatDateTime";
 import { roundToDecimal } from "@/util/math/round";
 import { capitalizeFirstLetter } from "@/util/string/capitalizeFirstLetter";
 import { Text, View } from "react-native";
+import Card from "@/components/layout/card";
 
 type Props = {
   expensesByDate?: Map<string, Expense[]>;
@@ -50,11 +51,11 @@ const ExpensesListTable = ({
   if (expensesByDate) {
     return (
       <View className="flex flex-col gap-4">
-        <View className="w-full bg-zinc-400 bg-opacity-25 p-8 rounded-md flex justify-center">
+        <Card className="">
           <ThemedText>
             Monthly Total: &euro; {_formatCurrency(total || 0)}
           </ThemedText>
-        </View>
+        </Card>
         <View id="expenses_list_table_container" className="w-full">
           {Array.from(expensesByDate).map(([key, val]) => {
             const total = _getTotal(val.map((doc: Expense) => doc.amount || 0));
