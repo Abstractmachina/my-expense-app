@@ -15,8 +15,6 @@ export async function fetchExpenses(args: {
 
   const apiKey = await SecureStore.getItemAsync("backend_api_key");
 
-  console.log(apiKey);
-
   const query = {
     date: range,
   };
@@ -48,8 +46,6 @@ export async function fetchExpenses(args: {
     throw new Error(`Error fetching expenses: ${res.statusText}`);
   }
   const json = await res.json();
-
-  console.log("json: ", json);
 
   return json["docs"] as Expense[];
 }

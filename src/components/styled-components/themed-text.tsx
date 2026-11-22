@@ -8,6 +8,7 @@ type TextStyle =
   | "default"
   | "h1"
   | "h2"
+  | "description"
   | "small"
   | "smallBold"
   | "link"
@@ -23,6 +24,7 @@ const TYPE_CLASS: Record<NonNullable<ThemedTextProps["type"]>, string> = {
   default: "text-base font-medium leading-6",
   h1: "text-5xl font-semibold leading-[52px]",
   h2: "text-[32px] font-semibold leading-[44px]",
+  description: "text-base italic",
   small: "text-sm font-medium leading-5",
   smallBold: "text-sm font-bold leading-5",
   link: "text-sm leading-[30px]",

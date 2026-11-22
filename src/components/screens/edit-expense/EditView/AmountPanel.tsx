@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { TextInput, View, Text } from 'react-native';
 import { EditViewContext } from './EditViewContext';
+import { ThemedView } from '@/components/styled-components/themed-view';
 
 type Props = {};
 
@@ -28,19 +29,19 @@ const AmountPanel = (props: Props) => {
   }
 
   return (
-    <View className="flex justify-end items-end p-8 gap-4">
+    <ThemedView className="flex flex-row justify-end items-end gap-4 px-6">
       <TextInput
-        className="text-[8rem] w-full leading-tight h-40 text-right bg-transparent border-none"
+        className="text-[4rem] text-foreground w-full leading-tight h-32 text-right bg-transparent border-none"
         keyboardType="decimal-pad"
         value={inputValue}
         onChangeText={handleChange}
         onBlur={handleBlur}
         autoFocus
       />
-      <View className="size-12 shrink-0 mb-7 border border-solid border-white rounded-full flex justify-center items-center text-2xl">
-        <Text>&euro;</Text>
+      <View className="size-12 shrink-0 mb-10 border border-solid border-white rounded-full flex justify-center items-center ">
+        <Text className="text-fg-800 text-2xl">&euro;</Text>
       </View>
-    </View>
+    </ThemedView>
   );
 };
 
