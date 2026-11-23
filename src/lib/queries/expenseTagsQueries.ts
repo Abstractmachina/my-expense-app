@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import type { ExpenseTag } from '@/payload-types';
+import { fetchExpenseTags } from '../fetchers/expenseTagFetchers';
 
 /**
  * Loads all expense tags. Placeholder: returns an empty list until the endpoint exists.
@@ -11,6 +12,10 @@ export function useExpenseTagsQuery() {
   return useQuery<ExpenseTag[]>({
     queryKey: ['expenseTags'],
     // shortcut: returns [] instead of calling Payload, replace with the real fetch once the endpoint exists
-    queryFn: async () => [],
+    queryFn: async () => {
+      const res = await fetchExpenseTags();
+
+      return res || [];
+    },
   });
 }

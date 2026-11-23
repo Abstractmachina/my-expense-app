@@ -1,18 +1,16 @@
-import Collapsible from '@/components/layout/Collapsible';
-import React, { useContext, useMemo } from 'react';
-import { Pressable, Text } from 'react-native';
-import { ThemedText } from '@/components/styled-components/themed-text';
-import { EditViewContext } from './EditViewContext';
-import { ExpenseTag } from '@/payload-types';
-import { chunkArray } from '@/util/arrays/chunkArray';
-import Carousel from '@/components/layout/Carousel';
-import { cn } from '@/util/ui';
+import Collapsible from "@/components/layout/Collapsible";
+import React, { useContext, useMemo } from "react";
+import { Pressable, Text } from "react-native";
+import { ThemedText } from "@/components/styled-components/themed-text";
+import { EditViewContext } from "./EditViewContext";
+import { ExpenseTag } from "@/payload-types";
+import { chunkArray } from "@/util/arrays/chunkArray";
+import Carousel from "@/components/layout/Carousel";
+import { cn } from "@/util/ui";
 
-type Props = {
-};
+type Props = {};
 
-const TagsPanel = ({ }: Props) => {
-
+const TagsPanel = ({}: Props) => {
   const ctx = useContext(EditViewContext);
 
   const paginatedTags = useMemo<ExpenseTag[][]>(() => {
@@ -21,20 +19,17 @@ const TagsPanel = ({ }: Props) => {
     return chunkArray(ctx?.allTags, 9);
   }, [ctx?.allTags]);
 
-
-
   const handleSelectTag = (tag: ExpenseTag) => {
     ctx?.setSelectedTag(tag);
   };
 
-
   return (
     <Collapsible.Item>
       <Collapsible.Header className="flex justify-between">
-        <ThemedText>Tags</ThemedText><ThemedText>{ctx?.selectedTag?.name}</ThemedText>
+        <ThemedText type="h2">Tags</ThemedText>
+        <ThemedText>{ctx?.selectedTag?.name}</ThemedText>
       </Collapsible.Header>
       <Collapsible.Content className="">
-
         <Carousel>
           <Carousel.Content className="w-full">
             {paginatedTags.map((page, pageIndex) => (
@@ -47,13 +42,15 @@ const TagsPanel = ({ }: Props) => {
                   <Pressable
                     key={tag.id}
                     className={cn(
-                      'px-4 py-2 bg-neutral-800 text-white border border-white/50 rounded-full hover:bg-white/20 whitespace-nowrap',
+                      "px-4 py-2 bg-neutral-800 text-white border border-white/50 rounded-full hover:bg-white/20 whitespace-nowrap",
                       ctx?.selectedTag?.id === tag.id &&
-                        'bg-red-800 active:bg-red-600 hover:bg-red-800',
+                        "bg-red-800 active:bg-red-600 hover:bg-red-800",
                     )}
                     onPress={() => handleSelectTag(tag)}
                     accessibilityRole="button"
-                    accessibilityState={{ selected: ctx?.selectedTag?.id === tag.id }}
+                    accessibilityState={{
+                      selected: ctx?.selectedTag?.id === tag.id,
+                    }}
                   >
                     <Text>{tag.name}</Text>
                   </Pressable>
@@ -63,7 +60,6 @@ const TagsPanel = ({ }: Props) => {
           </Carousel.Content>
           <Carousel.Dots />
         </Carousel>
-
       </Collapsible.Content>
     </Collapsible.Item>
   );
