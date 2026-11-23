@@ -25,7 +25,7 @@ const CloseButton = ({className, variant, onPress}:Props) => {
       // onClick={handleSubmit}
       // disabled={ctx?.isSaving}
     >
-      {false ? <Loader size={23} /> : <X color={THEME.dark['fg-800']} />}
+      {false ? <Loader size={23} /> : <X color={THEME.dark['fg-400']} />}
     </Button>
   )
 }

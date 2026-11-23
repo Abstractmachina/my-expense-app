@@ -34,7 +34,7 @@ const TYPE_CLASS: Record<NonNullable<ThemedTextProps["type"]>, string> = {
 
 // The surface colors are not meant for text, so they fall back to the accent foreground.
 const COLOR_CLASS: Record<ThemeColor, string> = {
-  text: "text-foreground",
+  text: "text-fg-400",
   textSecondary: "text-muted-foreground",
   background: "text-background",
   backgroundElement: "text-accent-foreground",

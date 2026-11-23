@@ -1,15 +1,16 @@
-import CategoriesPanel from "./CategoriesPanel";
-import EditViewController from "./EditViewController";
-import TagsPanel from "./TagsPanel";
-import DatePanel from "./DatePanel";
-import CommentPanel from "./CommentPanel";
-import AmountPanel from "./AmountPanel";
-import SubmitButton from "./SubmitButton";
-import Providers from "./Providers";
 import Collapsible from "@/components/layout/Collapsible";
 import { Expense } from "@/payload-types";
-import EditViewHeader from "./EditViewHeader";
 import { View } from "react-native";
+import AmountPanel from "./AmountPanel";
+import CategoriesPanel from "./categories-panel";
+import CommentPanel from "./CommentPanel";
+import DatePanel from "./DatePanel";
+import EditViewController from "./EditViewController";
+import EditViewHeader from "./EditViewHeader";
+import Providers from "./Providers";
+import SubmitButton from "./SubmitButton";
+import TagsPanel from "./TagsPanel";
+import { ThemedView } from "@/components/styled-components/themed-view";
 
 type Props = {
   existingDoc?: Expense;
@@ -29,7 +30,7 @@ export const EditView = ({ existingDoc, onSaved, onClose }: Props) => {
         onSaved={onSaved}
         key={componentKey}
       >
-        <View className="text-white flex flex-col h-full mytheme-primary-400">
+        <ThemedView className="flex flex-col h-full">
           <EditViewHeader onClose={onClose} />
           <AmountPanel />
           <Collapsible>
@@ -40,7 +41,7 @@ export const EditView = ({ existingDoc, onSaved, onClose }: Props) => {
           </Collapsible>
 
           <SubmitButton />
-        </View>
+        </ThemedView>
       </EditViewController>
     </Providers>
   );

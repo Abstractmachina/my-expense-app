@@ -44,7 +44,10 @@ module.exports = {
         // Dark-theme palette. Added alongside the existing tokens, which are unchanged.
         'bg-700': '#242424',
         'bg-800': '#141414',
-        'fg-800': '#fcfcfc',
+        'fg-100': '#4A4A4A',
+        'fg-200': '#5E5E5E',
+        'fg-300': '#ADADAD',
+        'fg-400': '#fcfcfc',
         'primary-100': '#94d2bd',
         'primary-200': '#0a9396',
         'primary-300': '#005f73',

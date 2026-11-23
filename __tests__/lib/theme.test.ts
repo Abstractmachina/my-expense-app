@@ -70,7 +70,7 @@ describe('PALETTE matches the palette colors in tailwind.config.js', () => {
       Object.entries(tailwindColors).filter(([key]) => key in palette),
     );
     expect(configPalette).toEqual(palette);
-    expect(Object.keys(palette)).toHaveLength(13);
+    expect(Object.keys(palette)).toHaveLength(16);
   });
 });
 

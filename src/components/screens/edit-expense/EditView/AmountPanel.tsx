@@ -39,7 +39,7 @@ const AmountPanel = (props: Props) => {
         autoFocus
       />
       <View className="size-12 shrink-0 mb-10 border border-solid border-white rounded-full flex justify-center items-center ">
-        <Text className="text-fg-800 text-2xl">&euro;</Text>
+        <Text className="text-fg-400 text-2xl">&euro;</Text>
       </View>
     </ThemedView>
   );
