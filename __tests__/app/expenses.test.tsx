@@ -27,8 +27,8 @@ jest.mock('@/components/styled-components/themed-view', () => ({
   },
 }));
 
-// The list view pulls in the table and its dependencies, so it is stubbed.
-jest.mock('@/components/screens/expenses/_views/ListView', () => ({
+// The list controller pulls in the table and its dependencies, so it is stubbed.
+jest.mock('@/components/screens/expenses/components/ExpensesListController', () => ({
   __esModule: true,
   default: () => {
     const { Text: MockText } = jest.requireActual('react-native');
@@ -44,14 +44,12 @@ describe('ExpensesScreen', () => {
     jest.mocked(useRouter).mockReturnValue(router as never);
   });
 
-  it('shows the Expenses title and the three tabs, with By Date selected first', async () => {
+  it('shows the expense list and the add button, with no tabs', async () => {
     await render(<ExpensesScreen />);
 
-    expect(screen.getByText('Expenses')).toBeTruthy();
-    expect(screen.getByRole('tab', { name: 'By Date' }).props.accessibilityState.selected).toBe(true);
-    expect(screen.getByRole('tab', { name: 'By Category' })).toBeTruthy();
-    expect(screen.getByRole('tab', { name: 'Batch Operations' })).toBeTruthy();
     expect(screen.getByText('list view')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Add expense' })).toBeTruthy();
+    expect(screen.queryAllByRole('tab')).toHaveLength(0);
   });
 
   it('opens the expense route with no id when the add button is pressed', async () => {
@@ -62,12 +60,4 @@ describe('ExpensesScreen', () => {
     expect(router.push).toHaveBeenCalledWith({ pathname: '/edit-expense/[[...id]]' });
   });
 
-  it('shows no edit form on the other tabs', async () => {
-    await render(<ExpensesScreen />);
-
-    await fireEvent.press(screen.getByRole('tab', { name: 'By Category' }));
-
-    expect(screen.queryByText('list view')).toBeNull();
-    expect(screen.queryByRole('button', { name: 'Add expense' })).toBeNull();
-  });
 });

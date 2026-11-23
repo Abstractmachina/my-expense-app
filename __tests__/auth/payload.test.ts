@@ -50,27 +50,27 @@ describe('verifyApiKey', () => {
 
   it('posts the key as apiKey to the verify endpoint and returns the parsed body', async () => {
     const verifyApiKey = loadVerifyApiKey(BACKEND_URL);
-    const fetchMock = mockFetch(true, { valid: true });
+    const fetchMock = mockFetch(true, { verified: true, name: 'Tao', email: 'tao@example.test' });
 
-    await expect(verifyApiKey('secret')).resolves.toEqual({ valid: true });
+    await expect(verifyApiKey('secret')).resolves.toEqual({ verified: true, name: 'Tao', email: 'tao@example.test' });
     expect(fetchMock).toHaveBeenCalledWith(
       `${BACKEND_URL}/api/verify-user`,
       expect.objectContaining({ method: 'POST', body: JSON.stringify({ apiKey: 'secret' }) })
     );
   });
 
-  it('returns false when the backend responds with an error status', async () => {
+  it('returns verified: false when the backend responds with an error status', async () => {
     const verifyApiKey = loadVerifyApiKey(BACKEND_URL);
-    mockFetch(false, { valid: true });
+    mockFetch(false, { verified: true });
 
-    await expect(verifyApiKey('secret')).resolves.toBe(false);
+    await expect(verifyApiKey('secret')).resolves.toEqual({ verified: false });
   });
 
-  it('returns the response body as-is when the key is not marked valid', async () => {
+  it('throws when the body does not have a boolean verified field', async () => {
     const verifyApiKey = loadVerifyApiKey(BACKEND_URL);
-    mockFetch(true, { valid: 'yes' });
+    mockFetch(true, { verified: 'yes' });
 
-    await expect(verifyApiKey('secret')).resolves.toEqual({ valid: 'yes' });
+    await expect(verifyApiKey('secret')).rejects.toThrow('Unexpected response from /api/verify-user');
   });
 
   it('throws when EXPO_PUBLIC_BACKEND_URL is not set', async () => {

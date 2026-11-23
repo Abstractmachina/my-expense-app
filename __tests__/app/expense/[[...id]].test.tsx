@@ -14,7 +14,7 @@ jest.mock('@/lib/queries/expensesQueries', () => ({
 }));
 
 // The edit view pulls in the full form, so it is stubbed to show the props the route passes in.
-jest.mock('@/components/screens/expenses/_views/EditView', () => ({
+jest.mock('@/components/screens/edit-expense/EditView', () => ({
   __esModule: true,
   default: (props: { existingDoc?: { id?: string }; onSaved?: () => void }) => {
     const { Text: MockText, Pressable: MockPressable } = jest.requireActual('react-native');
@@ -47,13 +47,13 @@ describe('ExpenseRoute', () => {
     expect(screen.getByText('add view')).toBeTruthy();
   });
 
-  it('renders nothing while the expense in the slug is loading', async () => {
+  it('renders the edit view straight away while the expense in the slug is loading', async () => {
     jest.mocked(useLocalSearchParams).mockReturnValue({ id: ['abc'] } as never);
 
     await render(<ExpenseRoute />);
 
     expect(useExpenseQuery).toHaveBeenCalledWith('abc');
-    expect(screen.queryByText('add view')).toBeNull();
+    expect(screen.getByText('add view')).toBeTruthy();
   });
 
   it('opens the edit form with the loaded expense when an id is in the slug', async () => {

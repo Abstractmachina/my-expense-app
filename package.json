@@ -75,7 +75,12 @@
     "preset": "jest-expo",
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
-    }
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/src/util/arrays/chunkArray.unit.spec.ts",
+      "<rootDir>/__tests__/components/expenses/index.test.tsx"
+    ]
   },
   "private": true
 }

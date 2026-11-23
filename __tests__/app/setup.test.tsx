@@ -34,7 +34,7 @@ describe('SetupScreen', () => {
   });
 
   it('stores the key and notifies the layout when the backend accepts it', async () => {
-    (verifyApiKey as jest.Mock).mockResolvedValue(true);
+    (verifyApiKey as jest.Mock).mockResolvedValue({ verified: true });
     const onKeySaved = jest.fn();
     await renderSetup(onKeySaved);
 
@@ -43,11 +43,11 @@ describe('SetupScreen', () => {
 
     await waitFor(() => expect(onKeySaved).toHaveBeenCalledTimes(1));
     expect(verifyApiKey).toHaveBeenCalledWith('secret');
-    expect(SecureStore.setItemAsync).toHaveBeenCalledWith('payload_api_key', 'secret');
+    expect(SecureStore.setItemAsync).toHaveBeenCalledWith('backend_api_key', 'secret');
   });
 
   it('does not store the key when the backend rejects it', async () => {
-    (verifyApiKey as jest.Mock).mockResolvedValue(false);
+    (verifyApiKey as jest.Mock).mockResolvedValue({ verified: false });
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
     const onKeySaved = jest.fn();
     await renderSetup(onKeySaved);

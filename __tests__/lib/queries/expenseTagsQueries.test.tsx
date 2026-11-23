@@ -4,6 +4,11 @@ import React, { PropsWithChildren } from 'react';
 
 import { useExpenseTagsQuery } from '@/lib/queries/expenseTagsQueries';
 
+// The fetcher calls the backend and SecureStore, so it is mocked to the "no tags" response.
+jest.mock('@/lib/fetchers/expenseTagFetchers', () => ({
+  fetchExpenseTags: jest.fn().mockResolvedValue(null),
+}));
+
 /**
  * Wraps a hook in a fresh react-query client.
  *
@@ -15,7 +20,7 @@ function wrapper({ children }: PropsWithChildren) {
 }
 
 describe('useExpenseTagsQuery', () => {
-  it('resolves to an empty list until the endpoint exists', async () => {
+  it('resolves to an empty list when the backend returns no tags', async () => {
     const { result } = await renderHook(() => useExpenseTagsQuery(), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
