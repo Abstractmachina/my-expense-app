@@ -21,8 +21,8 @@ const SubmitButton = ({ className, variant }: Props) => {
   return (
     <Button
       className={cn(
-        'flex justify-center p-8 hover:cursor-pointer rounded-none border-none w-12 h-12',
-        variant === 'small' && 'p-8 bg-background',
+        'flex justify-center p-8 hover:cursor-pointer rounded-none border-none bg-bg-800',
+        variant === 'small' && 'p-8  w-12 h-12',
         className,
       )}
       onClick={handleSubmit}
