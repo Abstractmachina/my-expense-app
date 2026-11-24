@@ -39,6 +39,7 @@ const PillList = <T extends LabeledItem>({ paginatedItems, onSelect, activeValue
     <View className="flex flex-col gap-4">
       <ScrollView
         ref={scrollRef}
+        testID="pill-list-scroll"
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}

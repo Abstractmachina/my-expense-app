@@ -55,6 +55,9 @@ const renderPanel = async (ctx: EditViewContextProps) => {
   return result;
 };
 
+// The first render of the full category list is slow on a cold CI runner, so the default 5s timeout is too tight.
+jest.setTimeout(15000);
+
 describe("CategoriesPanel", () => {
   it("shows the selected category label in the header", async () => {
     await renderPanel(makeContext(expenseCategoriesArray[1]));

@@ -50,11 +50,10 @@ describe("PillList", () => {
 
   it("moves the active dot to the page that was scrolled to", async () => {
     await render(<PillList paginatedItems={twoPages} />);
-    // fireEvent bubbles up to the enclosing ScrollView, so firing on a pill reaches its handlers.
-    const pill = screen.getByRole("button", { name: "Alpha" });
+    const scroll = screen.getByTestId("pill-list-scroll");
 
-    await fireEvent(pill, "layout", { nativeEvent: { layout: { width: 300 } } });
-    await fireEvent(pill, "momentumScrollEnd", { nativeEvent: { contentOffset: { x: 300 } } });
+    await fireEvent(scroll, "layout", { nativeEvent: { layout: { width: 300 } } });
+    await fireEvent(scroll, "momentumScrollEnd", { nativeEvent: { contentOffset: { x: 300 } } });
 
     expect(screen.getByLabelText("Go to page 2").props.className).toContain("bg-white");
     expect(screen.getByLabelText("Go to page 1").props.className).toContain("bg-white/40");
