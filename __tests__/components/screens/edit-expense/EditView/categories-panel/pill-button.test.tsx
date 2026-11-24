@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
-import PillButton from "@/components/screens/edit-expense/EditView/categories-panel/pill-button";
+import PillButton from "@/components/tables/pill-list/pill-button";
 
 // The theme imports global.css, which Jest cannot parse, so the themed text is stubbed.
 jest.mock("@/components/styled-components/themed-text", () => ({
@@ -20,13 +20,19 @@ describe("PillButton", () => {
   it("reports not selected when isActive is not set", async () => {
     await render(<PillButton>Taxes</PillButton>);
 
-    expect(screen.getByRole("button", { name: "Taxes" }).props.accessibilityState.selected).toBeFalsy();
+    expect(
+      screen.getByRole("button", { name: "Taxes" }).props.accessibilityState
+        .selected,
+    ).toBeFalsy();
   });
 
   it("reports selected when isActive is true", async () => {
     await render(<PillButton isActive>Taxes</PillButton>);
 
-    expect(screen.getByRole("button", { name: "Taxes" }).props.accessibilityState.selected).toBe(true);
+    expect(
+      screen.getByRole("button", { name: "Taxes" }).props.accessibilityState
+        .selected,
+    ).toBe(true);
   });
 
   it("calls onPress when pressed", async () => {

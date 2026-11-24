@@ -1,24 +1,30 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
-import IndicatorDots from "@/components/screens/edit-expense/EditView/categories-panel/indicator-dots";
+import IndicatorDots from "@/components/tables/pill-list/indicator-dots";
 
 describe("IndicatorDots", () => {
   it("renders one dot per item", async () => {
     await render(<IndicatorDots items={["a", "b", "c"]} activeIndex={0} />);
 
-    expect(screen.getAllByRole("button", { name: /Go to page/ })).toHaveLength(3);
+    expect(screen.getAllByRole("button", { name: /Go to page/ })).toHaveLength(
+      3,
+    );
   });
 
   it("renders nothing when there is only one page", async () => {
     await render(<IndicatorDots items={["a"]} activeIndex={0} />);
 
-    expect(screen.queryAllByRole("button", { name: /Go to page/ })).toHaveLength(0);
+    expect(
+      screen.queryAllByRole("button", { name: /Go to page/ }),
+    ).toHaveLength(0);
   });
 
   it("renders nothing when there are no pages", async () => {
     await render(<IndicatorDots items={[]} activeIndex={0} />);
 
-    expect(screen.queryAllByRole("button", { name: /Go to page/ })).toHaveLength(0);
+    expect(
+      screen.queryAllByRole("button", { name: /Go to page/ }),
+    ).toHaveLength(0);
   });
 
   it("highlights only the active dot", async () => {
@@ -33,7 +39,13 @@ describe("IndicatorDots", () => {
 
   it("calls onPress with the index of the dot that was pressed", async () => {
     const onPress = jest.fn();
-    await render(<IndicatorDots items={["a", "b", "c"]} activeIndex={0} onPress={onPress} />);
+    await render(
+      <IndicatorDots
+        items={["a", "b", "c"]}
+        activeIndex={0}
+        onPress={onPress}
+      />,
+    );
 
     await fireEvent.press(screen.getByLabelText("Go to page 3"));
 

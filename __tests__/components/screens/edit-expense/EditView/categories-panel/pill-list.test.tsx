@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
-import PillList from "@/components/screens/edit-expense/EditView/categories-panel/pill-list";
+import PillList from "@/components/tables/pill-list";
 
 // The theme imports global.css, which Jest cannot parse, so the themed text is stubbed.
 jest.mock("@/components/styled-components/themed-text", () => ({
@@ -29,8 +29,14 @@ describe("PillList", () => {
   it("marks only the pill matching activeValue as selected", async () => {
     await render(<PillList paginatedItems={twoPages} activeValue="b" />);
 
-    expect(screen.getByRole("button", { name: "Beta" }).props.accessibilityState.selected).toBe(true);
-    expect(screen.getByRole("button", { name: "Alpha" }).props.accessibilityState.selected).toBe(false);
+    expect(
+      screen.getByRole("button", { name: "Beta" }).props.accessibilityState
+        .selected,
+    ).toBe(true);
+    expect(
+      screen.getByRole("button", { name: "Alpha" }).props.accessibilityState
+        .selected,
+    ).toBe(false);
   });
 
   it("calls onSelect with the value of the pressed item", async () => {
@@ -45,17 +51,27 @@ describe("PillList", () => {
   it("renders one page indicator dot per page", async () => {
     await render(<PillList paginatedItems={twoPages} />);
 
-    expect(screen.getAllByRole("button", { name: /Go to page/ })).toHaveLength(2);
+    expect(screen.getAllByRole("button", { name: /Go to page/ })).toHaveLength(
+      2,
+    );
   });
 
   it("moves the active dot to the page that was scrolled to", async () => {
     await render(<PillList paginatedItems={twoPages} />);
     const scroll = screen.getByTestId("pill-list-scroll");
 
-    await fireEvent(scroll, "layout", { nativeEvent: { layout: { width: 300 } } });
-    await fireEvent(scroll, "momentumScrollEnd", { nativeEvent: { contentOffset: { x: 300 } } });
+    await fireEvent(scroll, "layout", {
+      nativeEvent: { layout: { width: 300 } },
+    });
+    await fireEvent(scroll, "momentumScrollEnd", {
+      nativeEvent: { contentOffset: { x: 300 } },
+    });
 
-    expect(screen.getByLabelText("Go to page 2").props.className).toContain("bg-white");
-    expect(screen.getByLabelText("Go to page 1").props.className).toContain("bg-white/40");
+    expect(screen.getByLabelText("Go to page 2").props.className).toContain(
+      "bg-white",
+    );
+    expect(screen.getByLabelText("Go to page 1").props.className).toContain(
+      "bg-white/40",
+    );
   });
 });

@@ -7,8 +7,8 @@ import {
   ExpenseCategory,
 } from "@/lib/types/expenseCategories";
 import { chunkArray } from "@/util/arrays/chunkArray";
+import PillList from "../../../../tables/pill-list";
 import { EditViewContext } from "../EditViewContext";
-import PillList from "./pill-list";
 
 const paginatedCategories = chunkArray<ExpenseCategory>(
   expenseCategoriesArray,

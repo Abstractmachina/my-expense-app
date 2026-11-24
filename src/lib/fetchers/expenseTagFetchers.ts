@@ -18,7 +18,7 @@ export async function fetchExpenseTags(): Promise<ExpenseTag[] | null> {
 
   const queryString = qs.stringify(
     {
-      // sort: "-createdAt",
+      sort: '-count',
       where: query,
       // depth: 3,
       limit: false,

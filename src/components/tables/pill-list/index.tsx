@@ -1,23 +1,27 @@
+import { useRef, useState } from "react";
 import {
-  View,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   ScrollView,
   ScrollViewInstance,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
+  View,
 } from "react-native";
 import IndicatorDots from "./indicator-dots";
 import PillButton from "./pill-button";
-import { useRef, useState } from "react";
 
 type LabeledItem = { value: string; label: string };
 
 type Props<T extends LabeledItem> = {
-  onSelect?: (value:string) => void;
+  onSelect?: (value: string) => void;
   activeValue?: string | null;
   paginatedItems: T[][];
 };
 
-const PillList = <T extends LabeledItem>({ paginatedItems, onSelect, activeValue }: Props<T>) => {
+const PillList = <T extends LabeledItem>({
+  paginatedItems,
+  onSelect,
+  activeValue,
+}: Props<T>) => {
   const scrollRef = useRef<ScrollViewInstance>(null);
   const [pageWidth, setPageWidth] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -58,7 +62,7 @@ const PillList = <T extends LabeledItem>({ paginatedItems, onSelect, activeValue
                 key={item.value}
                 // onPress={() => handleSelectCategory(category)}
                 onPress={() => onSelect?.(item.value)}
-                isActive={item.value === activeValue }
+                isActive={item.value === activeValue}
               >
                 {item.label}
               </PillButton>
