@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Platform } from "react-native";
+import { useEffect, useState } from "react";
+import { Modal, Platform, View } from "react-native";
 import DateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
 import { Button } from "@/components/rnr/button";
@@ -11,15 +11,19 @@ type Props = {
   value?: Date | null;
   /** Callback fired when a date is selected */
   onChange?: (date: Date | null) => void;
+  /** Whether the picker is open. Android opens its system dialog when this turns true */
+  open: boolean;
+  /** Callback fired when the picker should close */
+  onClose: () => void;
 }
 
 /**
- * Native date picker: an inline calendar on iOS, a system dialog opened by a button on Android.
+ * Native date picker, opened by the parent. Android shows the system dialog; iOS shows an inline calendar in a modal.
  *
- * @param {Props} props - `value` for controlled use, `onChange` for selections
- * @returns {JSX.Element} The date picker for the current platform
+ * @param {Props} props - `value` for controlled use, `onChange` for selections, `open`/`onClose` for visibility
+ * @returns {JSX.Element | null} The modal on iOS, or null on Android (the system dialog renders itself)
  */
-function DatePicker({value, onChange } : Props) {
+function DatePicker({ value, onChange, open, onClose }: Props) {
   const [internalDate, setInternalDate] = useState<Date | null>(null);
 
   // If `value` is passed, the component is controlled by the parent
@@ -43,30 +47,41 @@ function DatePicker({value, onChange } : Props) {
     onChange?.(date);
   };
 
-  if (Platform.OS === 'ios') {
-    return (
-      <DateTimePicker
-        mode="date"
-        display="inline"
-        value={selected ?? new Date()}
-        onValueChange={(_event, date) => handleSelect(date)}
-      />
-    );
+  // Open the Android system dialog when the parent requests it
+  useEffect(() => {
+    if (open && Platform.OS === 'android') {
+      DateTimePickerAndroid.open({
+        mode: 'date',
+        value: selected ?? new Date(),
+        onValueChange: (_event, date) => {
+          handleSelect(date);
+          onClose();
+        },
+        onDismiss: onClose,
+      });
+    }
+  }, [open]);
+
+  if (Platform.OS !== 'ios') {
+    return null;
   }
 
   return (
-    <Button
-      variant="outline"
-      onPress={() =>
-        DateTimePickerAndroid.open({
-          mode: 'date',
-          value: selected ?? new Date(),
-          onValueChange: (_event, date) => handleSelect(date),
-        })
-      }
-    >
-      <Text>{selected ? selected.toLocaleDateString() : 'Pick a date'}</Text>
-    </Button>
+    <Modal visible={open} transparent animationType="slide" onRequestClose={onClose}>
+      <View className="flex-1 justify-end bg-black/40">
+        <View className="bg-zinc-800 p-4">
+          <DateTimePicker
+            mode="date"
+            display="inline"
+            value={selected ?? new Date()}
+            onValueChange={(_event, date) => handleSelect(date)}
+          />
+          <Button variant="outline" onPress={onClose}>
+            <Text>Done</Text>
+          </Button>
+        </View>
+      </View>
+    </Modal>
   );
 };
 

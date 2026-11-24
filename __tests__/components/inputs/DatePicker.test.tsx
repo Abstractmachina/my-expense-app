@@ -38,14 +38,31 @@ describe('DatePicker', () => {
       jest.replaceProperty(Platform, 'OS', 'ios');
     });
 
-    it('renders the inline calendar and reports the picked date', async () => {
+    it('shows the inline calendar in a modal while open and reports the picked date', async () => {
       const onChange = jest.fn();
-      await render(<DatePicker value={null} onChange={onChange} />);
+      const onClose = jest.fn();
+      await render(<DatePicker value={null} onChange={onChange} open onClose={onClose} />);
 
       expect(lastPickerProps()).toMatchObject({ mode: 'date', display: 'inline' });
 
       await act(async () => lastPickerProps().onValueChange(nativeEvent, picked));
       expect(onChange).toHaveBeenCalledWith(picked);
+      expect(onClose).not.toHaveBeenCalled();
+    });
+
+    it('closes when Done is pressed', async () => {
+      const onClose = jest.fn();
+      await render(<DatePicker value={null} open onClose={onClose} />);
+
+      await fireEvent.press(screen.getByText('Done'));
+      expect(onClose).toHaveBeenCalled();
+    });
+
+    it('uses its own state when uncontrolled', async () => {
+      await render(<DatePicker open onClose={jest.fn()} />);
+
+      await act(async () => lastPickerProps().onValueChange(nativeEvent, picked));
+      expect(lastPickerProps().value).toEqual(picked);
     });
   });
 
@@ -54,29 +71,40 @@ describe('DatePicker', () => {
       jest.replaceProperty(Platform, 'OS', 'android');
     });
 
-    it('opens the system dialog from a button', async () => {
-      await render(<DatePicker value={null} />);
+    it('does not open the system dialog while closed', async () => {
+      await render(<DatePicker value={null} open={false} onClose={jest.fn()} />);
 
-      await fireEvent.press(screen.getByText('Pick a date'));
+      expect(DateTimePickerAndroid.open).not.toHaveBeenCalled();
+    });
+
+    it('opens the system dialog when opened', async () => {
+      await render(<DatePicker value={null} open onClose={jest.fn()} />);
+
       expect(DateTimePickerAndroid.open).toHaveBeenCalledWith(
         expect.objectContaining({ mode: 'date' }),
       );
     });
 
-    it('shows the date the user picked in the dialog', async () => {
-      await render(<DatePicker />);
+    it('reports the picked date and closes', async () => {
+      const onChange = jest.fn();
+      const onClose = jest.fn();
+      await render(<DatePicker value={null} onChange={onChange} open onClose={onClose} />);
 
-      await fireEvent.press(screen.getByText('Pick a date'));
       const { onValueChange } = (DateTimePickerAndroid.open as jest.Mock).mock.calls[0][0];
       await act(async () => onValueChange(nativeEvent, picked));
 
-      expect(screen.getByText(picked.toLocaleDateString())).toBeTruthy();
+      expect(onChange).toHaveBeenCalledWith(picked);
+      expect(onClose).toHaveBeenCalled();
     });
 
-    it('shows the controlled value without a local state change', async () => {
-      await render(<DatePicker value={picked} />);
+    it('closes when the dialog is dismissed', async () => {
+      const onClose = jest.fn();
+      await render(<DatePicker value={null} open onClose={onClose} />);
 
-      expect(screen.getByText(picked.toLocaleDateString())).toBeTruthy();
+      const { onDismiss } = (DateTimePickerAndroid.open as jest.Mock).mock.calls[0][0];
+      await act(async () => onDismiss());
+
+      expect(onClose).toHaveBeenCalled();
     });
   });
 });

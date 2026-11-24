@@ -3,13 +3,6 @@ import qs from "qs";
 import * as SecureStore from "expo-secure-store";
 
 export async function fetchExpenseTags(): Promise<ExpenseTag[] | null> {
-  // const { year, month } = args;
-  // if (Number.isNaN(year) || Number.isNaN(month)) return null;
-
-  // const startISO = new Date(year, month, 1).toISOString();
-  // const endISO = new Date(year, month + 1, 0).toISOString();
-  // const range = { greater_than_equal: startISO, less_than_equal: endISO };
-
   const apiKey = await SecureStore.getItemAsync("backend_api_key");
 
   const query = {
