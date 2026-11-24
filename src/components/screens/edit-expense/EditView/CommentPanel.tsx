@@ -1,6 +1,7 @@
 import { Textarea } from '@/components/inputs/TextArea';
 import Collapsible from '@/components/layout/Collapsible';
-import React, { useContext } from 'react';
+import React, { useContext, useId } from 'react';
+import { CollapsibleContext } from '@/components/layout/Collapsible/CollapsibleContext';
 import { MessageSquareText } from 'lucide-react-native';
 import { THEME } from '@/lib/theme';
 import { ThemedText } from '@/components/styled-components/themed-text';
@@ -13,9 +14,16 @@ type Props = {};
 const CommentPanel = (props: Props) => {
   const ctx = useContext(EditViewContext);
   const hasComment = !!ctx?.comment?.trim();
+  const collapsible = useContext(CollapsibleContext);
+  const id = useId();
+
+  // Single-line input: the return key submits, which closes the keyboard and collapses the panel
+  function handleSubmit() {
+    collapsible?.setState(id, false);
+  }
 
   return (
-    <Collapsible.Item>
+    <Collapsible.Item id={id}>
       <Collapsible.Header className="flex flex-row justify-between items-center">
         <ThemedText type="h2">Comment</ThemedText>
         {hasComment && (
@@ -29,7 +37,10 @@ const CommentPanel = (props: Props) => {
       <Collapsible.Content>
         <Textarea
           accessibilityLabel="Comment"
-          className="w-full min-h-20"
+          multiline={false}
+          returnKeyType="done"
+          onSubmitEditing={handleSubmit}
+          className="w-full min-h-0 h-10"
           value={ctx?.comment || undefined}
           onChangeText={(text) => ctx?.setComment(text)}
         />

@@ -114,4 +114,17 @@ describe("CategoriesPanel", () => {
     const dots = screen.queryAllByRole("button", { name: /Go to page/ });
     expect(dots).toHaveLength(pages > 1 ? pages : 0);
   });
+
+  it("collapses the panel after a category is picked", async () => {
+    await renderPanel(makeContext(null));
+
+    await fireEvent.press(
+      screen.getByRole("button", { name: expenseCategoriesArray[2].label }),
+    );
+
+    expect(
+      screen.getByRole("button", { name: /^Category/ }).props.accessibilityState
+        .expanded,
+    ).toBe(false);
+  });
 });

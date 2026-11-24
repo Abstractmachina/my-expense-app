@@ -20,11 +20,14 @@ export const useCollapsibleItem = () => {
 type Props = {
   defaultOpen?: boolean;
   className?: string;
+  /** Optional id, so a parent panel can close this item via CollapsibleContext.setState */
+  id?: string;
 };
 
-const CollapsibleItem = ({ children, defaultOpen = false, className }: PropsWithChildren<Props>) => {
+const CollapsibleItem = ({ children, defaultOpen = false, className, id: idProp }: PropsWithChildren<Props>) => {
   const rootContext = useContext(CollapsibleContext);
-  const id = useId();
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
 
   if (!rootContext) {
     throw new Error("CollapsibleItem must be used within a CollapsibleProvider");

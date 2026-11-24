@@ -101,6 +101,25 @@ describe("CommentPanel", () => {
     expect(ctx.setComment).not.toHaveBeenCalled();
   });
 
+  it("uses a single-line input with a done return key", async () => {
+    await renderPanel(makeContext(null));
+
+    const input = screen.getByLabelText("Comment");
+    expect(input.props.multiline).toBe(false);
+    expect(input.props.returnKeyType).toBe("done");
+  });
+
+  it("collapses the panel when the return key is pressed", async () => {
+    await renderPanel(makeContext("Lunch"));
+
+    await fireEvent(screen.getByLabelText("Comment"), "submitEditing");
+
+    expect(
+      screen.getByRole("button", { name: /^Comment/ }).props.accessibilityState
+        .expanded,
+    ).toBe(false);
+  });
+
   it("writes the typed text to context", async () => {
     const ctx = makeContext(null);
     await renderPanel(ctx);
