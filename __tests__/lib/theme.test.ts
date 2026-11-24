@@ -6,6 +6,7 @@ import { THEME } from '@/lib/theme';
 const tailwindColors = require('../../tailwind.config.js').theme.extend.colors as Record<string, string>;
 
 const palette = Object.fromEntries(Object.entries(THEME.dark).filter(([, value]) => value.startsWith('#')));
+const lightPalette = Object.fromEntries(Object.entries(THEME.light).filter(([, value]) => value.startsWith('#')));
 
 const css = fs.readFileSync(path.join(__dirname, '../../src/global.css'), 'utf8');
 
@@ -64,13 +65,32 @@ function stripHsl(value: string): string {
   return match ? match[1].trim() : value;
 }
 
-describe('PALETTE matches the palette colors in tailwind.config.js', () => {
-  it('has the same keys and hex values', () => {
+/**
+ * Converts a hex color to the space-separated RGB channels stored in global.css, e.g. `#00f0ff` -> `0 240 255`.
+ *
+ * @param hex - A six-digit hex color such as `#00f0ff`.
+ * @returns The red, green and blue channels as decimal numbers separated by spaces.
+ */
+function hexToChannels(hex: string): string {
+  const n = parseInt(hex.slice(1), 16);
+  return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`;
+}
+
+describe('PALETTE in tailwind.config.js points at its CSS variables', () => {
+  it('maps every palette key to rgb(var(--key) / <alpha-value>)', () => {
     const configPalette = Object.fromEntries(
       Object.entries(tailwindColors).filter(([key]) => key in palette),
     );
-    expect(configPalette).toEqual(palette);
+    expect(configPalette).toEqual(
+      Object.fromEntries(Object.keys(palette).map((key) => [key, `rgb(var(--${key}) / <alpha-value>)`])),
+    );
     expect(Object.keys(palette)).toHaveLength(16);
+  });
+});
+
+describe('THEME.light palette has the same keys as THEME.dark', () => {
+  it('uses matching hex key names', () => {
+    expect(Object.keys(lightPalette).sort()).toEqual(Object.keys(palette).sort());
   });
 });
 
@@ -80,14 +100,13 @@ describe('THEME matches the CSS variables in global.css', () => {
     const mismatches: string[] = [];
 
     for (const [key, value] of Object.entries(THEME[scheme])) {
-      if (value.startsWith('#')) continue; // palette hex entries are not CSS variables
       const cssName = toCssName(key);
       const cssValue = vars.get(cssName);
       if (cssValue === undefined) {
         mismatches.push(`${key}: no --${cssName} in global.css`);
         continue;
       }
-      const expected = key === 'radius' ? value : stripHsl(value);
+      const expected = key === 'radius' ? value : value.startsWith('#') ? hexToChannels(value) : stripHsl(value);
       if (expected !== cssValue) {
         mismatches.push(`${key}: THEME "${value}" vs --${cssName} "${cssValue}"`);
       }

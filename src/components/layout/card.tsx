@@ -4,15 +4,17 @@ import { cn } from "@/util/ui";
 
 type Props = {
   className?: string;
+  id?: string;
 };
 
-const Card = ({ className, children }: Props & PropsWithChildren) => {
+const Card = ({ className, children, ...props }: Props & PropsWithChildren) => {
   return (
     <ThemedView
       className={cn(
-        "w-full bg-zinc-400 bg-opacity-25 p-8 rounded-md flex justify-center",
+        "w-full bg-none p-4 rounded-2xl flex justify-center",
         className,
       )}
+      {...props}
     >
       {children}
     </ThemedView>

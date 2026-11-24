@@ -18,6 +18,8 @@ import { ScrollView, Text, View } from "react-native";
 import BatchOperationsPanel from "./BatchOperations";
 import ControlPanel from "./ControlPanel";
 import ExpensesListTable from "./ExpensesListTable";
+import { ThemedView } from "@/components/styled-components/themed-view";
+import TabNav from "./ExpensesListTable/tab-nav";
 
 type Props = {};
 
@@ -66,28 +68,31 @@ const ExpensesListController = ({}: Props) => {
     return results;
   }, [expensesQuery.data, selectedTab]);
 
-  console.log("sortedExpensesByCategory", expensesQuery.data?.length);
+  // Monthly total: sum of every expense loaded for the selected month.
+  const monthlyTotal = useMemo(
+    () => getTotal((expensesQuery.data ?? []).map((doc: Expense) => doc.amount || 0)),
+    [expensesQuery.data],
+  );
 
   return (
     <>
-      <View className="relative flex-1 flex-col px-4 sm:px-0">
+      <ThemedView className="relative flex-1 flex-col px-4 sm:px-0 gap-2">
         <ThemedText type="h1" className="">
           Expenses
         </ThemedText>
-        {/* <ThemedText>{ selectedMonth } {selectedYear}</ThemedText> */}
-        {/* <ThemedText>{ expensesQuery.status } {expensesQuery.data?.length}</ThemedText> */}
         <ControlPanel
           selectedMonth={selectedMonth}
           setSelectedMonth={setSelectedMonth}
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
+          monthlyTotal={monthlyTotal}
         />
         <Tabs
           value={selectedTab}
           className="flex-1"
           onValueChange={(value: string) => setSelectedTab(value)}
         >
-          <TabsList className="w-full gap-2">
+          {/* <TabsList className="w-full gap-2">
             <TabsTrigger value="date">
               <ThemedText>By Date</ThemedText>
             </TabsTrigger>
@@ -97,7 +102,8 @@ const ExpensesListController = ({}: Props) => {
             <TabsTrigger value="batch">
               <ThemedText>Batch Operations</ThemedText>
             </TabsTrigger>
-          </TabsList>
+          </TabsList> */}
+          <TabNav selectedTab={selectedTab} />
 
       <ScrollView className="flex-1" contentContainerClassName="pb-32">
 
@@ -134,7 +140,7 @@ const ExpensesListController = ({}: Props) => {
       </ScrollView>
 
         </Tabs>
-      </View>
+      </ThemedView>
     </>
   );
 };

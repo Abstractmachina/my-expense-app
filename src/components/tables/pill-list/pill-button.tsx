@@ -13,8 +13,8 @@ const PillButton = ({ onPress, isActive, className , children}: Props & PropsWit
   return (
     <Pressable
       className={cn(
-        "grow px-4 py-2 bg-bg-800 text-primary-100 border border-fg-300 rounded-full whitespace-nowrap flex flex-row justify-center text-nowrap",
-        isActive && " bg-primary-200 active:bg-primary-100",
+        "grow px-4 py-2 bg-bg-500 text-primary-300 border border-fg-300 rounded-full whitespace-nowrap flex flex-row justify-center text-nowrap",
+        isActive && " bg-primary-400 active:bg-primary-300",
         className,
       )}
       onPress={onPress}

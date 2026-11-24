@@ -1,70 +1,49 @@
 import { ExpenseTag } from "@/payload-types";
 
-
-type ExpenseCategoryType = NonNullable<ExpenseTag['category']>[number];
+type ExpenseCategoryType = NonNullable<ExpenseTag["category"]>[number];
 
 type ExpenseCategory = {
   label: string;
   value: ExpenseCategoryType;
 };
 
-const expenseCategoriesArray : ExpenseCategory[] = [
+const expenseCategoriesArray: ExpenseCategory[] = [
   {
-    label: 'Personal Recurring',
-    value: 'personalRecurring',
+    label: "Food",
+    value: "food",
   },
   {
-    label: "Personal One-Off",
-    value: 'personalOneOff',
+    label: "Shelter",
+    value: "shelter",
   },
   {
-    label: "Investments & Savings",
-    value: 'investments',
+    label: "Transport",
+    value: "transport",
   },
   {
-    label: 'Taxes',
-    value: 'taxes',
+    label: "Health",
+    value: "health",
   },
   {
-    label: 'Business',
-    value: 'business',
+    label: "Fitness",
+    value: "fitness",
   },
   {
-    label: 'Food',
-    value: 'food',
+    label: "Education",
+    value: "education",
   },
   {
-    label: 'Shelter',
-    value: 'shelter',
+    label: "Wife",
+    value: "wife",
   },
   {
-    label: 'Transport',
-    value: 'transport',
-  },
-  {
-    label: 'Health',
-    value: 'health',
-  },
-  {
-    label: 'Fitness',
-    value: 'fitness',
-  },
-  {
-    label: 'Education',
-    value: 'education',
-  },
-  {
-    label: 'Wife',
-    value: 'wife',
-  },
-  {
-    label: 'Non-Essential',
-    value: 'non-essential',
+    label: "Non-Essential",
+    value: "non-essential",
   },
 ];
 
-const getExpenseCategory = (value: string) : ExpenseCategory | undefined => expenseCategoriesArray.find((category) => category.value === value);
-
+const getExpenseCategory = (value: string): ExpenseCategory | undefined =>
+  expenseCategoriesArray.find((category) => category.value === value);
 
 export { expenseCategoriesArray, getExpenseCategory };
 export type { ExpenseCategory };

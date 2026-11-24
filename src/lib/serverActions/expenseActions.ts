@@ -1,13 +1,33 @@
 import type { Expense } from '@/payload-types';
+import * as SecureStore from 'expo-secure-store';
 
 /**
- * Placeholder for the Payload expense endpoints. Each call rejects until the API is wired up,
- * so a save shows an error instead of silently dropping data.
+ * Creates an expense in Payload.
  *
- * @throws Always, with a message that the endpoint is not implemented yet.
+ * @param data - The expense fields to save.
+ * @returns The created expense document.
+ * @throws If the request fails or the backend responds with a non-OK status.
  */
-export async function createExpense(_data: Partial<Expense>): Promise<Expense> {
-  throw new Error('createExpense: expenses endpoint not implemented yet');
+export async function createExpense(data: Partial<Expense>): Promise<Expense> {
+  const apiKey = await SecureStore.getItemAsync('backend_api_key');
+
+  const res = await fetch(`${process.env.EXPO_PUBLIC_BACKEND_URL}/api/expenses`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `users API-Key ${apiKey}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Error creating expense: ${res.status} ${res.statusText}`);
+  }
+
+  const json = (await res.json()) as { doc: Expense };
+
+  console.log("post result", json);
+  return json.doc;
 }
 
 /**

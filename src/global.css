@@ -41,6 +41,23 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    /* Palette as RGB channels (for alpha support). Light values are placeholders to be filled in; keys mirror THEME in src/lib/theme.ts. */
+    --bg-300: 255 0 255;
+    --bg-400: 255 0 255;
+    --bg-500: 255 0 255;
+    --fg-200: 255 0 255;
+    --fg-300: 255 0 255;
+    --fg-400: 255 0 255;
+    --fg-500: 255 0 255;
+    --primary-300: 255 0 255;
+    --primary-400: 255 0 255;
+    --primary-500: 255 0 255;
+    --secondary-300: 255 0 255;
+    --secondary-400: 255 0 255;
+    --secondary-500: 255 0 255;
+    --tertiary-300: 255 0 255;
+    --tertiary-400: 255 0 255;
+    --tertiary-500: 255 0 255;
   }
 
   .dark:root {
@@ -67,5 +84,21 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --bg-300: 31 45 61;
+    --bg-400: 7 10 15;
+    --bg-500: 1 2 3;
+    --fg-200: 237 243 250;
+    --fg-300: 178 192 207;
+    --fg-400: 154 165 177;
+    --fg-500: 117 128 138;
+    --primary-300: 135 244 255;
+    --primary-400: 0 240 255;
+    --primary-500: 0 157 181;
+    --secondary-300: 143 255 190;
+    --secondary-400: 0 255 106;
+    --secondary-500: 0 120 64;
+    --tertiary-300: 255 171 207;
+    --tertiary-400: 255 46 136;
+    --tertiary-500: 181 0 79;
   }
 }

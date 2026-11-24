@@ -44,7 +44,7 @@ Package manager is pnpm (`pnpm-lock.yaml`). Scripts are thin wrappers around `ex
 
 **Routing.** expo-router with file-based routes under `src/app`. `package.json` sets `main` to `expo-router/entry`. `app.json` enables `typedRoutes` and `reactCompiler`. `src/app/index.tsx` and `src/app/explore.tsx` are still starter-template screens.
 
-**Auth gate (the core flow).** `src/app/_layout.tsx` reads the SecureStore key `payload_api_key` once, on mount:
+**Auth gate (the core flow).** `src/app/_layout.tsx` reads the SecureStore key `backend_api_key` once, on mount:
 
 - No key: renders `<Slot />` and redirects to `/setup` (`src/app/setup.tsx`), which saves the key to SecureStore.
 - Key present: renders `<AppTabs />` (`src/components/app-tabs.tsx`, a `NativeTabs` with `index`, `explore` and `expenses`) and redirects away from `/setup`.

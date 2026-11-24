@@ -2,7 +2,7 @@ import { PropsWithChildren, useMemo, useState } from 'react';
 import { EditViewContext } from './EditViewContext';
 import { Expense, ExpenseTag } from '@/payload-types';
 import { createExpense, updateExpense } from '@/lib/serverActions/expenseActions';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { sendMessage } from '@/components/informative/sendMessage';
 import { useExpenseTagsQuery } from '@/lib/queries/expenseTagsQueries';
 import { ExpenseCategory, getExpenseCategory } from '@/lib/types/expenseCategories';
@@ -14,6 +14,7 @@ type Props = {
 
 const EditViewController = ({ children, onSaved, existingDoc }: Props & PropsWithChildren) => {
   const isNew = !existingDoc?.id;
+  const queryClient = useQueryClient();
 
   const initialTags = useExpenseTagsQuery().data;
   const [amount, setAmount] = useState<number | null>(isNew ? null : existingDoc?.amount || null);
@@ -85,23 +86,21 @@ const EditViewController = ({ children, onSaved, existingDoc }: Props & PropsWit
     onError: (error: any) => {
       sendMessage({ message: 'Error creating expense', description: error.message });
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       // data.doc should be the newly created document returned from Payload
       if (data) {
         console.log('Expense created successfully', data);
+        // Refetch the month lists now so the expense list shows the new expense on arrival
+        await queryClient.invalidateQueries({ queryKey: ['expenses'] });
         onSaved?.();
+        
+
       }
-      // if (!existingDocId) {
-      //   // 1. If we just CREATED a doc, redirect to its specific edit page
-      //   // Adjust the base URL if your admin panel is not at /admin
-      //   router.push(`/admin/collections/expenses/${data.doc.id}`);
-      // } else {
-      //   // 2. If we just UPDATED a doc, tell the Server Component to re-fetch its data
-      //   router.refresh();
-      // }
     },
     onSettled: () => {
       setIsSaving(false);
+
+
     },
   });
 
@@ -109,6 +108,7 @@ const EditViewController = ({ children, onSaved, existingDoc }: Props & PropsWit
     console.log('submit');
 
     saveMutation.mutate();
+    
   }
 
   return (

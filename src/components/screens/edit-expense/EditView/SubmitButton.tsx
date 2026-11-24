@@ -15,17 +15,18 @@ const SubmitButton = ({ className, variant }: Props) => {
   const ctx = useContext(EditViewContext);
 
   function handleSubmit() {
+    console.log("submitting")
     ctx?.submit();
   }
 
   return (
     <Button
       className={cn(
-        'flex justify-center p-8 hover:cursor-pointer rounded-none border-none bg-bg-800',
+        'flex justify-center p-8 hover:cursor-pointer rounded-none border-none bg-bg-500',
         variant === 'small' && 'p-8  w-12 h-12',
         className,
       )}
-      onClick={handleSubmit}
+      onPress={handleSubmit}
       disabled={ctx?.isSaving}
     >
       {ctx?.isSaving ? <Loader size={23} /> : <Check color={THEME.dark['fg-400']} />}

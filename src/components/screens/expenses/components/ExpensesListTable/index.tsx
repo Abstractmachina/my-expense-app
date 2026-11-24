@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 
+import Card from "@/components/layout/card";
 import { ThemedText } from "@/components/styled-components/themed-text";
 import { Expense, ExpenseTag } from "@/payload-types";
 import { formatDateTime } from "@/util/formatDateTime";
 import { roundToDecimal } from "@/util/math/round";
 import { capitalizeFirstLetter } from "@/util/string/capitalizeFirstLetter";
 import { Text, View } from "react-native";
-import Card from "@/components/layout/card";
+import { formatCurrency } from "../../../../../util/currency/format-currency";
 
 type Props = {
   expensesByDate?: Map<string, Expense[]>;
@@ -51,49 +52,52 @@ const ExpensesListTable = ({
   if (expensesByDate) {
     return (
       <View className="flex flex-col gap-4">
-        <Card className="">
-          <ThemedText>
-            Monthly Total: &euro; {_formatCurrency(total || 0)}
+        {/* <Card className="bg-primary-400">
+          <ThemedText className="text-sm">
+            Monthly Total: {formatCurrency(total || 0)}
           </ThemedText>
-        </Card>
-        <View id="expenses_list_table_container" className="w-full">
+        </Card> */}
+        <Card id="expenses_list_table_container" className="w-full">
           {Array.from(expensesByDate).map(([key, val]) => {
             const total = _getTotal(val.map((doc: Expense) => doc.amount || 0));
             return (
               <View key={key} className="w-full mb-4">
-                <View className="flex-row px-2">
-                  <Text className="text-left pl-2">{key}</Text>
-                  <Text className="text-right pr-2">
-                    {_formatCurrency(total)}
-                  </Text>
+                <View className="flex flex-row px-2 justify-between">
+                  <ThemedText className="text-left pl-2">{key}</ThemedText>
+                  <ThemedText className="text-right pr-2">
+                    {formatCurrency(total)}
+                  </ThemedText>
                 </View>
-                <View className="bg-zinc-800">
+                <View className="">
                   {val.map((doc: Expense, index: number) => (
                     <View key={key + "_" + index} className="flex-row">
-                      <View className="pl-8 flex-1">
+                      <View className="pl-8 flex flex-row">
                         {/* <Link href={`/admin/collections/expenses/${doc.id}`}> */}
-                        <Text className="font-bold">
+                        <ThemedText className="font-bold">
                           {sortBy === "category"
                             ? formatDateTime(doc.updatedAt || "")
                             : doc.category}
-                        </Text>
-                        <Text> {(doc.tag as ExpenseTag)?.name}</Text>
+                        </ThemedText>
+                        <ThemedText>
+                          {" "}
+                          {(doc.tag as ExpenseTag)?.name}
+                        </ThemedText>
                         {/* </Link> */}
-                        <Text className="text-zinc-400 italic text-xxs ml-2">
+                        <ThemedText className="text-zinc-400 italic text-xxs ml-2">
                           {" "}
                           {doc.comment}
-                        </Text>
+                        </ThemedText>
                       </View>
-                      <Text className="w-20 text-right pr-2">
-                        {_formatCurrency(doc.amount || 0)}
-                      </Text>
+                      <ThemedText className="w-20 text-right pr-2">
+                        {formatCurrency(doc.amount || 0)}
+                      </ThemedText>
                     </View>
                   ))}
                 </View>
               </View>
             );
           })}
-        </View>
+        </Card>
       </View>
     );
   }
@@ -138,22 +142,22 @@ const ExpensesListTable = ({
       <View className="flex flex-col gap-4">
         <View className="w-full bg-zinc-400 bg-opacity-25 p-8 rounded-md flex flex-col items-center justify-center">
           <ThemedText>
-            Monthly Total: &euro; {_formatCurrency(total || 0)}
+            Monthly Total: {formatCurrency(total || 0)}
           </ThemedText>
           <ThemedText>
-            Variable: {_formatCurrency(variableExpenditure)} | Fixed:{" "}
-            {_formatCurrency(fixedExpenditure)}
+            Variable: {formatCurrency(variableExpenditure)} | Fixed:{" "}
+            {formatCurrency(fixedExpenditure)}
           </ThemedText>
           <ThemedText>
-            Daily variable expenditure: {_formatCurrency(dailyExpenditure)}
+            Daily variable expenditure: {formatCurrency(dailyExpenditure)}
           </ThemedText>
           <ThemedText>
             Projected variable expenditure:{" "}
-            {_formatCurrency(projectedExpenditure)}
+            {formatCurrency(projectedExpenditure)}
           </ThemedText>
           <ThemedText>
             Projected total expenditure:{" "}
-            {_formatCurrency(projectedExpenditure + fixedExpenditure)}
+            {formatCurrency(projectedExpenditure + fixedExpenditure)}
           </ThemedText>
         </View>
         <View id="expenses_list_table_container" className="w-full">
@@ -192,7 +196,7 @@ const ExpensesListTable = ({
                             <View className="flex-row font-bold">
                               <Text className="text-left pl-8">{key2}</Text>
                               <Text className="text-right pr-8">
-                                {_formatCurrency(
+                                {formatCurrency(
                                   _getTotal(
                                     val2.map((doc: Expense) => doc.amount || 0),
                                   ),
@@ -222,7 +226,7 @@ const ExpensesListTable = ({
                                       </Text>
                                     </View>
                                     <Text className="text-right pr-8">
-                                      {_formatCurrency(doc.amount || 0)}
+                                      {formatCurrency(doc.amount || 0)}
                                     </Text>
                                   </View>
                                 );
@@ -248,8 +252,4 @@ export default ExpensesListTable;
 
 function _getTotal(vals: number[]): number {
   return vals.reduce((accumulator, currentVal) => accumulator + currentVal, 0);
-}
-
-function _formatCurrency(val: number): string {
-  return (Math.round(val * 100) / 100).toFixed(2);
 }
