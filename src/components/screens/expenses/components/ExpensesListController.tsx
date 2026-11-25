@@ -3,23 +3,20 @@ import { useEffect, useMemo, useState } from "react";
 import { Expense, ExpenseTag } from "@/payload-types";
 
 import Loader from "@/components/animated/Loader";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/rnr/tabs";
+import { Tabs, TabsContent } from "@/components/rnr/tabs";
 import { ThemedText } from "@/components/styled-components/themed-text";
+import { ThemedView } from "@/components/styled-components/themed-view";
 import { useExpensesQuery } from "@/lib/queries/expensesQueries";
 import { useExpenseTagsQuery } from "@/lib/queries/expenseTagsQueries";
 import { formatDateTime, isEqualToformattedDates } from "@/util/formatDateTime";
 import { getTotal } from "@/util/math/getTotal";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import BatchOperationsPanel from "./BatchOperations";
-import ControlPanel from "./ControlPanel";
+import HeaderPanel from "./header-panel";
 import ExpensesListTable from "./ExpensesListTable";
-import { ThemedView } from "@/components/styled-components/themed-view";
 import TabNav from "./ExpensesListTable/tab-nav";
+import CategoryCompositionBar from "./ExpensesListTable/category-composition-bar";
+import CategorySelectionNav from "./ExpensesListTable/category-selection-nav";
 
 type Props = {};
 
@@ -70,7 +67,10 @@ const ExpensesListController = ({}: Props) => {
 
   // Monthly total: sum of every expense loaded for the selected month.
   const monthlyTotal = useMemo(
-    () => getTotal((expensesQuery.data ?? []).map((doc: Expense) => doc.amount || 0)),
+    () =>
+      getTotal(
+        (expensesQuery.data ?? []).map((doc: Expense) => doc.amount || 0),
+      ),
     [expensesQuery.data],
   );
 
@@ -80,65 +80,56 @@ const ExpensesListController = ({}: Props) => {
         <ThemedText type="h1" className="">
           Expenses
         </ThemedText>
-        <ControlPanel
+        <HeaderPanel
           selectedMonth={selectedMonth}
           setSelectedMonth={setSelectedMonth}
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
           monthlyTotal={monthlyTotal}
         />
+
+        <CategoryCompositionBar expenses={expensesQuery.data} />
+
+        <CategorySelectionNav />
+
         <Tabs
           value={selectedTab}
           className="flex-1"
           onValueChange={(value: string) => setSelectedTab(value)}
         >
-          {/* <TabsList className="w-full gap-2">
-            <TabsTrigger value="date">
-              <ThemedText>By Date</ThemedText>
-            </TabsTrigger>
-            <TabsTrigger value="category">
-              <ThemedText>By Category</ThemedText>
-            </TabsTrigger>
-            <TabsTrigger value="batch">
-              <ThemedText>Batch Operations</ThemedText>
-            </TabsTrigger>
-          </TabsList> */}
           <TabNav selectedTab={selectedTab} />
 
-      <ScrollView className="flex-1" contentContainerClassName="pb-32">
-
-          <TabsContent value="date">
-            {loading ? (
-              <View className="w-full h-96 flex justify-center items-center">
-                <Loader />
-              </View>
-            ) : (
-              <ExpensesListTable
-                expensesByDate={sortedExpensesByDate}
-                expensesByCategory={sortedExpensesByCategory}
-                sortBy={"date"}
-              />
-            )}
-          </TabsContent>
-          <TabsContent value="category">
-            {loading ? (
-              <View className="w-full h-96 flex justify-center items-center">
-                <Loader />
-              </View>
-            ) : (
-              <ExpensesListTable
-                expensesByDate={sortedExpensesByDate}
-                expensesByCategory={sortedExpensesByCategory}
-                sortBy={"category"}
-              />
-            )}
-          </TabsContent>
-          <TabsContent value="batch">
-            <BatchOperationsPanel />
+          <ScrollView className="flex-1" contentContainerClassName="pb-32">
+            <TabsContent value="date">
+              {loading ? (
+                <View className="w-full h-96 flex justify-center items-center">
+                  <Loader />
+                </View>
+              ) : (
+                <ExpensesListTable
+                  expensesByDate={sortedExpensesByDate}
+                  expensesByCategory={sortedExpensesByCategory}
+                  sortBy={"date"}
+                />
+              )}
             </TabsContent>
-            
-      </ScrollView>
-
+            <TabsContent value="category">
+              {loading ? (
+                <View className="w-full h-96 flex justify-center items-center">
+                  <Loader />
+                </View>
+              ) : (
+                <ExpensesListTable
+                  expensesByDate={sortedExpensesByDate}
+                  expensesByCategory={sortedExpensesByCategory}
+                  sortBy={"category"}
+                />
+              )}
+            </TabsContent>
+            <TabsContent value="batch">
+              <BatchOperationsPanel />
+            </TabsContent>
+          </ScrollView>
         </Tabs>
       </ThemedView>
     </>
@@ -146,7 +137,6 @@ const ExpensesListController = ({}: Props) => {
 };
 
 export default ExpensesListController;
-
 
 function _orderExpensesByDay(input: Expense[], tags: ExpenseTag[]) {
   const output = new Map<string, Expense[]>();

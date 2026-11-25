@@ -9,10 +9,10 @@ type Props = {
 
 const TabNav = ({selectedTab}: Props) => {
   return (
-    <TabsList className="w-full gap-2 rounded-full">
+    <TabsList className="">
       <TabsTrigger value="date">
         <ThemedText
-          className={cn(selectedTab === "date" ? "text-bg-400" : "")}
+          className={cn(selectedTab === "date" ? "text-primary-400" : "")}
         >By Date</ThemedText>
       </TabsTrigger>
       <TabsTrigger value="category">

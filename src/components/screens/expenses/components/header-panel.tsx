@@ -12,7 +12,7 @@ type Props = {
   monthlyTotal?: number;
 };
 
-const ControlPanel = ({
+const HeaderPanel = ({
   selectedMonth,
   setSelectedMonth,
   selectedYear,
@@ -28,8 +28,13 @@ const ControlPanel = ({
         setSelectedYear={setSelectedYear}
       />
       <View>
-        <ThemedText className="text-primary-400 text-sm">Monthly Total</ThemedText>
-        <ThemedText type="h2" className="text-primary-400 text-[4rem] font-bold tracking-tighter">
+        <ThemedText className="text-primary-400 text-sm">
+          Monthly Total
+        </ThemedText>
+        <ThemedText
+          type="h2"
+          className="text-primary-400 text-[4rem] font-bold tracking-tighter"
+        >
           {formatCurrency(monthlyTotal || 0)}
         </ThemedText>
       </View>
@@ -37,4 +42,4 @@ const ControlPanel = ({
   );
 };
 
-export default ControlPanel;
+export default HeaderPanel;

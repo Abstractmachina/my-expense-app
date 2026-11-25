@@ -9,36 +9,24 @@ type ExpenseCategory = {
 
 const expenseCategoriesArray: ExpenseCategory[] = [
   {
-    label: "Food",
-    value: "food",
+    label: "Personal Recurring",
+    value: "personalRecurring",
   },
   {
-    label: "Shelter",
-    value: "shelter",
+    label: "Personal One-Off",
+    value: "personalOneOff",
   },
   {
-    label: "Transport",
-    value: "transport",
+    label: "Investments",
+    value: "investments",
   },
   {
-    label: "Health",
-    value: "health",
+    label: "Taxes",
+    value: "taxes",
   },
   {
-    label: "Fitness",
-    value: "fitness",
-  },
-  {
-    label: "Education",
-    value: "education",
-  },
-  {
-    label: "Wife",
-    value: "wife",
-  },
-  {
-    label: "Non-Essential",
-    value: "non-essential",
+    label: "Business",
+    value: "business",
   },
 ];
 
