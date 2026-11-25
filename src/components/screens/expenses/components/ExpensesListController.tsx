@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Expense, ExpenseTag } from "@/payload-types";
 
-import Loader from "@/components/animated/Loader";
 import { Tabs, TabsContent } from "@/components/rnr/tabs";
 import { ThemedText } from "@/components/styled-components/themed-text";
 import { ThemedView } from "@/components/styled-components/themed-view";
@@ -13,12 +12,12 @@ import { getTotal } from "@/util/math/getTotal";
 import { ScrollView, View } from "react-native";
 import BatchOperationsPanel from "./BatchOperations";
 import HeaderPanel from "./header-panel";
-import ExpensesListTable from "./ExpensesListTable";
 import TabNav from "./ExpensesListTable/tab-nav";
 import CategoryCompositionBar from "./ExpensesListTable/category-composition-bar";
 import CategorySelectionNav from "./ExpensesListTable/category-selection-nav";
 import DateTable from "./ExpensesListTable/date-table";
 import CategoryTable from "./ExpensesListTable/category-table";
+import Loader from "@/components/animated/Loader";
 
 type Props = {};
 
@@ -90,35 +89,39 @@ const ExpensesListController = ({}: Props) => {
           monthlyTotal={monthlyTotal}
         />
 
-        <CategoryCompositionBar expenses={expensesQuery.data} />
+        {loading ? (
+          <View className="w-full h-96 flex justify-center items-center">
+            <Loader />
+          </View>
+        ) : (
+          <>
+            <CategoryCompositionBar expenses={expensesQuery.data} />
 
-        <CategorySelectionNav />
+            <CategorySelectionNav />
 
-        <Tabs
-          value={selectedTab}
-          className="flex-1"
-          onValueChange={(value: string) => setSelectedTab(value)}
-        >
-          <TabNav selectedTab={selectedTab} />
+            <Tabs
+              value={selectedTab}
+              className="flex-1"
+              onValueChange={(value: string) => setSelectedTab(value)}
+            >
+              <TabNav selectedTab={selectedTab} />
 
-          <ScrollView className="flex-1 " contentContainerClassName="pb-32">
-            <TabsContent value="date">
-              <DateTable expensesByDate={sortedExpensesByDate} />
-            </TabsContent>
-            <TabsContent value="category">
-              {/* <ExpensesListTable
-                expensesByDate={sortedExpensesByDate}
-                expensesByCategory={sortedExpensesByCategory}
-                sortBy={"category"}
-                loading={loading}
-              /> */}
-              <CategoryTable expenses={sortedExpensesByCategory || new Map()} />
-            </TabsContent>
-            <TabsContent value="batch">
-              <BatchOperationsPanel />
-            </TabsContent>
-          </ScrollView>
-        </Tabs>
+              <ScrollView className="flex-1 " contentContainerClassName="pb-32">
+                <TabsContent value="date">
+                  <DateTable expensesByDate={sortedExpensesByDate} />
+                </TabsContent>
+                <TabsContent value="category">
+                  <CategoryTable
+                    expenses={sortedExpensesByCategory || new Map()}
+                  />
+                </TabsContent>
+                <TabsContent value="batch">
+                  <BatchOperationsPanel />
+                </TabsContent>
+              </ScrollView>
+            </Tabs>
+          </>
+        )}
       </ThemedView>
     </>
   );

@@ -1,4 +1,3 @@
-import { Separator } from "@/components/rnr/separator";
 import { ThemedText } from "@/components/styled-components/themed-text";
 import { Expense } from "@/payload-types";
 import { formatCurrency } from "@/util/currency/format-currency";
@@ -30,38 +29,12 @@ const CategoryTable = ({ expenses }: Props) => {
       }
     }
   }
-  // const monthlyTotal = variableExpenditure + fixedExpenditure;
-  const today = new Date();
-  const dayOfMonth = today.getDate();
-  const dailyExpenditure = variableExpenditure / dayOfMonth;
-  const now = new Date();
-  // month is 0-indexed (Jan=0, Feb=1, etc.)
-  // We get the next month and set the day to 0
-  const daysInMonth = new Date(
-    now.getFullYear(),
-    now.getMonth() + 1,
-    0,
-  ).getDate();
-  const projectedExpenditure = dailyExpenditure * daysInMonth;
+
   return (
-    <View id="expenses_list_table_container" className="w-full flex flex-col gap-2">
-      {/* <View className="w-full bg-zinc-400 bg-opacity-25 p-8 rounded-md flex flex-col items-center justify-center">
-        <ThemedText>Monthly Total: {formatCurrency(monthlyTotal)}</ThemedText>
-        <ThemedText>
-          Variable: {formatCurrency(variableExpenditure)} | Fixed:{" "}
-          {formatCurrency(fixedExpenditure)}
-        </ThemedText>
-        <ThemedText>
-          Daily variable expenditure: {formatCurrency(dailyExpenditure)}
-        </ThemedText>
-        <ThemedText>
-          Projected variable expenditure: {formatCurrency(projectedExpenditure)}
-        </ThemedText>
-        <ThemedText>
-          Projected total expenditure:{" "}
-          {formatCurrency(projectedExpenditure + fixedExpenditure)}
-        </ThemedText>
-      </View> */}
+    <View
+      id="expenses_list_table_container"
+      className="w-full flex flex-col gap-2"
+    >
       {Array.from(expenses).map(([key, val], index) => {
         const total = getTotal(
           Array.from(val).map((group) =>
@@ -70,7 +43,10 @@ const CategoryTable = ({ expenses }: Props) => {
         );
 
         return (
-          <Card key={"categoryTable_" + key} className="w-full border border-fg-500/25">
+          <Card
+            key={"categoryTable_" + key}
+            className="w-full border border-fg-500/25"
+          >
             <View className="flex flex-row justify-between">
               <ThemedText
                 className={cn(
