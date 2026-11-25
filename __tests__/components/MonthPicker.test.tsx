@@ -2,8 +2,11 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 
 import MonthPicker from "@/components/inputs/MonthPicker";
 
-// lucide-react-native ships ES modules that Jest cannot load, so the icon is stubbed.
-jest.mock("lucide-react-native", () => ({ Triangle: () => null }));
+// lucide-react-native ships ES modules that Jest cannot load, so the icons are stubbed.
+jest.mock("lucide-react-native", () => ({
+  ChevronLeft: () => null,
+  Triangle: () => null,
+}));
 
 describe("MonthPicker", () => {
   beforeEach(() => {
@@ -66,7 +69,7 @@ describe("MonthPicker", () => {
     expect(setYear).toHaveBeenCalledWith(2024);
   });
 
-  it("hides the next arrow on the current month", async () => {
+  it("disables the next arrow on the current month", async () => {
     await render(
       <MonthPicker
         selectedMonth={9}
@@ -76,7 +79,7 @@ describe("MonthPicker", () => {
       />,
     );
 
-    expect(screen.queryByRole("button", { name: "Next month" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Next month" })).toBeDisabled();
   });
 
   it("moves forward one month when the next arrow is pressed", async () => {
