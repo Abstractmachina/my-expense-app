@@ -18,6 +18,7 @@ import TabNav from "./ExpensesListTable/tab-nav";
 import CategoryCompositionBar from "./ExpensesListTable/category-composition-bar";
 import CategorySelectionNav from "./ExpensesListTable/category-selection-nav";
 import DateTable from "./ExpensesListTable/date-table";
+import CategoryTable from "./ExpensesListTable/category-table";
 
 type Props = {};
 
@@ -105,12 +106,13 @@ const ExpensesListController = ({}: Props) => {
               <DateTable expensesByDate={sortedExpensesByDate} />
             </TabsContent>
             <TabsContent value="category">
-              <ExpensesListTable
+              {/* <ExpensesListTable
                 expensesByDate={sortedExpensesByDate}
                 expensesByCategory={sortedExpensesByCategory}
                 sortBy={"category"}
                 loading={loading}
-              />
+              /> */}
+              <CategoryTable expenses={sortedExpensesByCategory || new Map()} />
             </TabsContent>
             <TabsContent value="batch">
               <BatchOperationsPanel />
