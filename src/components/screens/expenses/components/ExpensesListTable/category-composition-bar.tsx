@@ -32,7 +32,8 @@ const CategoryCompositionBar = ({ expenses }: Props) => {
       result.set(category, amount / total);
     }
 
-    return result;
+    // Largest segment first.
+    return new Map([...result.entries()].sort((a, b) => b[1] - a[1]));
   }, [expenses]);
 
   return (

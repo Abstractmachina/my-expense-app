@@ -13,6 +13,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, useColorScheme, View } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { ApiKeySavedContext } from "@/auth/api-key-context";
 import { AnimatedSplashOverlay } from "@/components/animated/animated-icon";
@@ -76,23 +77,26 @@ export default function RootLayout() {
   }
 
   // Conditionally render the Setup screen OR the App Tabs based on auth state
+  // Gesture-based components (e.g. the Toaster) need this root view to be mounted.
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <AnimatedSplashOverlay />
-        <ApiKeySavedContext.Provider value={() => setHasKey(true)}>
-          {hasKey ? (
-            // The tab group and the add/edit route both live in this stack, so the route is reachable from the tabs.
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="edit-expense/[[...id]]" options={{ presentation: "modal" }} />
-            </Stack>
-          ) : (
-            <Slot />
-          )}
-        </ApiKeySavedContext.Provider>
-        <PortalHost />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+          <AnimatedSplashOverlay />
+          <ApiKeySavedContext.Provider value={() => setHasKey(true)}>
+            {hasKey ? (
+              // The tab group and the add/edit route both live in this stack, so the route is reachable from the tabs.
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="edit-expense/[[...id]]" options={{ presentation: "modal" }} />
+              </Stack>
+            ) : (
+              <Slot />
+            )}
+          </ApiKeySavedContext.Provider>
+          <PortalHost />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }

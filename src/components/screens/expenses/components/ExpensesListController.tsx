@@ -17,6 +17,7 @@ import ExpensesListTable from "./ExpensesListTable";
 import TabNav from "./ExpensesListTable/tab-nav";
 import CategoryCompositionBar from "./ExpensesListTable/category-composition-bar";
 import CategorySelectionNav from "./ExpensesListTable/category-selection-nav";
+import DateTable from "./ExpensesListTable/date-table";
 
 type Props = {};
 
@@ -99,32 +100,17 @@ const ExpensesListController = ({}: Props) => {
         >
           <TabNav selectedTab={selectedTab} />
 
-          <ScrollView className="flex-1" contentContainerClassName="pb-32">
+          <ScrollView className="flex-1 " contentContainerClassName="pb-32">
             <TabsContent value="date">
-              {loading ? (
-                <View className="w-full h-96 flex justify-center items-center">
-                  <Loader />
-                </View>
-              ) : (
-                <ExpensesListTable
-                  expensesByDate={sortedExpensesByDate}
-                  expensesByCategory={sortedExpensesByCategory}
-                  sortBy={"date"}
-                />
-              )}
+              <DateTable expensesByDate={sortedExpensesByDate} />
             </TabsContent>
             <TabsContent value="category">
-              {loading ? (
-                <View className="w-full h-96 flex justify-center items-center">
-                  <Loader />
-                </View>
-              ) : (
-                <ExpensesListTable
-                  expensesByDate={sortedExpensesByDate}
-                  expensesByCategory={sortedExpensesByCategory}
-                  sortBy={"category"}
-                />
-              )}
+              <ExpensesListTable
+                expensesByDate={sortedExpensesByDate}
+                expensesByCategory={sortedExpensesByCategory}
+                sortBy={"category"}
+                loading={loading}
+              />
             </TabsContent>
             <TabsContent value="batch">
               <BatchOperationsPanel />

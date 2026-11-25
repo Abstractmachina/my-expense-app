@@ -13,7 +13,7 @@ export type ThemedViewProps = ViewProps & {
 const BACKGROUND_CLASS: Record<ThemeColor, string> = {
   text: 'bg-foreground',
   textSecondary: 'bg-muted-foreground',
-  background: 'bg-background',
+  background: 'bg-bg-400',
   backgroundElement: 'bg-secondary',
   backgroundSelected: 'bg-muted',
 };

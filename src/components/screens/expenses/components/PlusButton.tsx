@@ -2,6 +2,7 @@ import { Plus } from "lucide-react-native";
 
 import { cn } from "@/util/ui";
 import { Button } from "@/components/rnr/button";
+import { THEME } from "@/lib/theme";
 
 type Props = {
   className?: string;
@@ -23,9 +24,9 @@ const PlusButton = ({ className, onPress }: Props) => {
       accessibilityLabel="Add expense"
       // Android draws elevation above siblings; zIndex alone does not do that there.
       style={{ elevation: 8 }}
-      className={cn("size-16 items-center justify-center rounded-full bg-red-500", className)}
+      className={cn("size-12 items-center justify-center rounded-full bg-secondary-400", className)}
     >
-      <Plus color="white" />
+      <Plus color={THEME.dark["bg-400"]} />
     </Button>
   );
 };

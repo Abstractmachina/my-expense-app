@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import Loader from "@/components/animated/Loader";
 import Card from "@/components/layout/card";
 import { ThemedText } from "@/components/styled-components/themed-text";
 import { Expense, ExpenseTag } from "@/payload-types";
@@ -8,17 +9,20 @@ import { roundToDecimal } from "@/util/math/round";
 import { capitalizeFirstLetter } from "@/util/string/capitalizeFirstLetter";
 import { Text, View } from "react-native";
 import { formatCurrency } from "../../../../../util/currency/format-currency";
+import { _getTotal } from "./_getTotal";
 
 type Props = {
   expensesByDate?: Map<string, Expense[]>;
   expensesByCategory?: Map<string, Map<string, Expense[]>>;
   sortBy?: "date" | "category";
+  loading?: boolean;
 };
 
 const ExpensesListTable = ({
   expensesByDate,
   expensesByCategory,
   sortBy,
+  loading,
 }: Props) => {
   const total = useMemo(() => {
     if (sortBy === "date") {
@@ -48,6 +52,14 @@ const ExpensesListTable = ({
       return result;
     }
   }, [expensesByDate, expensesByCategory, sortBy]);
+
+  if (loading) {
+    return (
+      <View className="w-full h-96 flex justify-center items-center">
+        <Loader />
+      </View>
+    );
+  }
 
   if (expensesByDate) {
     return (
@@ -141,9 +153,7 @@ const ExpensesListTable = ({
     return (
       <View className="flex flex-col gap-4">
         <View className="w-full bg-zinc-400 bg-opacity-25 p-8 rounded-md flex flex-col items-center justify-center">
-          <ThemedText>
-            Monthly Total: {formatCurrency(total || 0)}
-          </ThemedText>
+          <ThemedText>Monthly Total: {formatCurrency(total || 0)}</ThemedText>
           <ThemedText>
             Variable: {formatCurrency(variableExpenditure)} | Fixed:{" "}
             {formatCurrency(fixedExpenditure)}
@@ -249,7 +259,3 @@ const ExpensesListTable = ({
 };
 
 export default ExpensesListTable;
-
-function _getTotal(vals: number[]): number {
-  return vals.reduce((accumulator, currentVal) => accumulator + currentVal, 0);
-}
