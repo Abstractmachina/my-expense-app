@@ -36,7 +36,7 @@ const AmountPanel = (props: Props) => {
         value={inputValue}
         onChangeText={handleChange}
         onBlur={handleBlur}
-        autoFocus
+        autoFocus={ctx?.isNew}
       />
       <View className="size-12 shrink-0 mb-10 border border-solid border-white rounded-full flex justify-center items-center ">
         <Text className="text-fg-400 text-2xl">&euro;</Text>
