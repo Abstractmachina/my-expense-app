@@ -1,9 +1,8 @@
+// DEPRECATED: replaced by src/app/edit-expense.tsx. Flagged for manual removal (do not rely on this file).
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 import EditView from "@/components/screens/edit-expense/EditView";
 import { useExpenseQuery } from "@/lib/queries/expensesQueries";
-import { ThemedView } from "@/components/styled-components/themed-view";
-import { ThemedText } from "@/components/styled-components/themed-text";
 
 /**
  * Add or edit an expense. `/expense` adds a new one; `/expense/<id>` edits that expense.
@@ -19,11 +18,7 @@ export default function ExpenseRoute() {
   // Deep links have no history to go back to, so fall back to the expenses list.
   const goBack = () => (router.canGoBack() ? router.back() : router.replace("/expenses"));
 
-  // Render nothing rather than an empty add form while an existing expense loads.
-  // if (expenseId && !existingDoc) return <EditView existingDoc={existingDoc ?? undefined} onSaved={goBack} onClose={goBack} />;
 
   return <EditView existingDoc={existingDoc ?? undefined} onSaved={goBack} onClose={goBack} />;
-  // return <ThemedView >
-  //   <ThemedText>Edit Expense</ThemedText>
-  // </ThemedView>;
+
 }

@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
 import type { Expense } from '@/payload-types';
-import { fetchExpenses } from '../fetchers/expensesFetchers';
+import { fetchExpense, fetchExpenses } from '../fetchers/expensesFetchers';
 
 /**
- * Loads one expense for the edit screen. Placeholder: resolves to null until the endpoint exists.
+ * Loads one expense for the edit screen from Payload.
  *
  * @param id - The expense id. Undefined when adding a new expense; the query then stays idle.
  * @returns The react-query result holding the expense, or null.
@@ -13,8 +13,7 @@ export function useExpenseQuery(id?: string) {
   return useQuery<Expense | null>({
     queryKey: ['expense', id],
     enabled: !!id,
-    // shortcut: resolves to null instead of calling Payload, replace with the real fetch once the endpoint exists
-    queryFn: async () => null,
+    queryFn: () => fetchExpense(id as string),
   });
 }
 

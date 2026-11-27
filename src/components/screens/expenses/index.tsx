@@ -29,7 +29,7 @@ export default function ExpensesScreen() {
 
       <View pointerEvents="box-none" className="absolute inset-0">
         <PlusButton
-          onPress={() => router.push({ pathname: "/edit-expense/[[...id]]" })}
+          onPress={() => router.push({ pathname: "/edit-expense" })}
           className="absolute bottom-12 left-8 z-50"
         />
       </View>

@@ -21,6 +21,9 @@ import { PortalHost } from "@rn-primitives/portal";
 
 import "@/global.css";
 
+// Anchor the modal edit route on the tabs, so it opens over them instead of as a standalone first screen.
+export const unstable_settings = { anchor: "(tabs)" };
+
 SplashScreen.preventAutoHideAsync();
 
 // One client for the whole app, so every screen's queries share the same cache.
@@ -88,7 +91,7 @@ export default function RootLayout() {
               // The tab group and the add/edit route both live in this stack, so the route is reachable from the tabs.
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(tabs)" />
-                <Stack.Screen name="edit-expense/[[...id]]" options={{ presentation: "modal" }} />
+                <Stack.Screen name="edit-expense" options={{ presentation: "modal" }} />
               </Stack>
             ) : (
               <Slot />

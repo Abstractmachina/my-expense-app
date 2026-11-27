@@ -1,4 +1,5 @@
 import Card from "@/components/layout/card";
+import { Link } from "expo-router";
 import { ThemedText } from "@/components/styled-components/themed-text";
 import { Expense, ExpenseTag } from "@/payload-types";
 import { formatCurrency } from "@/util/currency/format-currency";
@@ -48,9 +49,11 @@ const DateTable = ({ expensesByDate }: Props) => {
                         CATEGORY_COLORS[doc.category].bg,
                       )}
                     />
-                    <ThemedText className="text-fg-300">
-                      {(doc.tag as ExpenseTag)?.name}
-                    </ThemedText>
+                    <Link href={{ pathname: "/edit-expense", params: { id: String(doc.id) } }}>
+                      <ThemedText className="text-fg-300">
+                        {(doc.tag as ExpenseTag)?.name}
+                      </ThemedText>
+                    </Link>
                     {doc.comment && (
                       <ThemedText className="text-fg-500 italic text-xs ml-1 border border-bg-300 px-2 rounded-sm">
                         {doc.comment}

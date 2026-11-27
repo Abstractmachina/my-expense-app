@@ -57,7 +57,7 @@ describe('ExpensesScreen', () => {
 
     await fireEvent.press(screen.getByRole('button', { name: 'Add expense' }));
 
-    expect(router.push).toHaveBeenCalledWith({ pathname: '/edit-expense/[[...id]]' });
+    expect(router.push).toHaveBeenCalledWith({ pathname: '/edit-expense' });
   });
 
 });
