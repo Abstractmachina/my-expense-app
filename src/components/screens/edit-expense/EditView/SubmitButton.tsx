@@ -29,7 +29,7 @@ const SubmitButton = ({ className, variant }: Props) => {
       onPress={handleSubmit}
       disabled={ctx?.isSaving}
     >
-      {ctx?.isSaving ? <Loader size={23} /> : <Check color={THEME.dark['fg-400']} />}
+      {ctx?.isSaving ? <Loader size={12} /> : <Check color={THEME.dark['fg-400']} />}
     </Button>
   );
 };

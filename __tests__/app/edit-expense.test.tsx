@@ -1,26 +1,21 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import ExpenseRoute from '@/app/edit-expense/[[...id]]';
-import { useExpenseQuery } from '@/lib/queries/expensesQueries';
+import ExpenseRoute from '@/app/edit-expense';
 
 jest.mock('expo-router', () => ({
   useLocalSearchParams: jest.fn(),
   useRouter: jest.fn(),
 }));
 
-jest.mock('@/lib/queries/expensesQueries', () => ({
-  useExpenseQuery: jest.fn(),
-}));
-
-// The edit view pulls in the full form, so it is stubbed to show the props the route passes in.
+// EditView loads the expense and renders the form, so it is stubbed to show the props the route passes in.
 jest.mock('@/components/screens/edit-expense/EditView', () => ({
   __esModule: true,
-  default: (props: { existingDoc?: { id?: string }; onSaved?: () => void }) => {
+  default: (props: { id?: string; onSaved?: () => void }) => {
     const { Text: MockText, Pressable: MockPressable } = jest.requireActual('react-native');
     return (
       <>
-        <MockText>{props.existingDoc ? `edit ${props.existingDoc.id}` : 'add view'}</MockText>
+        <MockText>{props.id ? `edit ${props.id}` : 'add view'}</MockText>
         <MockPressable onPress={props.onSaved}>
           <MockText>save stub</MockText>
         </MockPressable>
@@ -31,34 +26,22 @@ jest.mock('@/components/screens/edit-expense/EditView', () => ({
 
 const router = { back: jest.fn(), canGoBack: jest.fn(), replace: jest.fn() };
 
-describe('ExpenseRoute', () => {
+describe('ExpenseRoute (edit-expense)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(useRouter).mockReturnValue(router as never);
-    jest.mocked(useExpenseQuery).mockReturnValue({ data: undefined } as never);
   });
 
-  it('opens the add form when no id is in the slug', async () => {
+  it('passes no id to the edit view when adding', async () => {
     jest.mocked(useLocalSearchParams).mockReturnValue({} as never);
 
     await render(<ExpenseRoute />);
 
-    expect(useExpenseQuery).toHaveBeenCalledWith(undefined);
     expect(screen.getByText('add view')).toBeTruthy();
   });
 
-  it('renders the edit view straight away while the expense in the slug is loading', async () => {
-    jest.mocked(useLocalSearchParams).mockReturnValue({ id: ['abc'] } as never);
-
-    await render(<ExpenseRoute />);
-
-    expect(useExpenseQuery).toHaveBeenCalledWith('abc');
-    expect(screen.getByText('add view')).toBeTruthy();
-  });
-
-  it('opens the edit form with the loaded expense when an id is in the slug', async () => {
-    jest.mocked(useLocalSearchParams).mockReturnValue({ id: ['abc'] } as never);
-    jest.mocked(useExpenseQuery).mockReturnValue({ data: { id: 'abc' } } as never);
+  it('passes the id from the query string to the edit view when editing', async () => {
+    jest.mocked(useLocalSearchParams).mockReturnValue({ id: 'abc' } as never);
 
     await render(<ExpenseRoute />);
 

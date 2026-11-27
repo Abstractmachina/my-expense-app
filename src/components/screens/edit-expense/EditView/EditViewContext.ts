@@ -16,7 +16,9 @@ type EditViewContextProps = {
   comment: string | null;
   setComment: (comment: string | null) => void;
   submit: () => void;
+  remove: () => void;
   isSaving?: boolean;
+  isDeleting?: boolean;
   isNew?: boolean;
 }
 
