@@ -1,6 +1,5 @@
 import { act, fireEvent, render, screen } from "@testing-library/react-native";
 
-import Collapsible from "@/components/layout/Collapsible";
 import CommentPanel from "@/components/screens/edit-expense/EditView/CommentPanel";
 import {
   EditViewContext,
@@ -41,28 +40,38 @@ const makeContext = (comment: string | null): EditViewContextProps =>
   }) as unknown as EditViewContextProps;
 
 /**
- * Renders the panel inside the edit-view context and opens its collapsible section.
+ * Renders the panel inside the edit-view context.
  *
  * @param {EditViewContextProps} ctx - The context value to provide
  * @returns {Promise<ReturnType<typeof render>>} The render result
  */
-const renderPanel = async (ctx: EditViewContextProps) => {
-  const result = await render(
-    <Collapsible>
-      <EditViewContext.Provider value={ctx}>
-        <CommentPanel />
-      </EditViewContext.Provider>
-    </Collapsible>,
+const renderPanel = async (ctx: EditViewContextProps) =>
+  render(
+    <EditViewContext.Provider value={ctx}>
+      <CommentPanel />
+    </EditViewContext.Provider>,
   );
+
+/**
+ * Opens the comment popup by pressing the row.
+ *
+ * @returns {Promise<void>} Resolves once the press has been handled
+ */
+const openPopup = async () => {
   await fireEvent.press(screen.getByRole("button", { name: /^Comment/ }));
-  return result;
 };
 
 describe("CommentPanel", () => {
-  it("shows the Comment title in the header", async () => {
+  it("shows the Comment title in the row", async () => {
     await renderPanel(makeContext(null));
 
     expect(screen.getByText("Comment")).toBeTruthy();
+  });
+
+  it("shows the comment text as a preview in the row", async () => {
+    await renderPanel(makeContext("Lunch with team"));
+
+    expect(screen.getByText("Lunch with team")).toBeTruthy();
   });
 
   it("shows the has-content indicator only when there is a comment", async () => {
@@ -77,17 +86,44 @@ describe("CommentPanel", () => {
     expect(screen.queryByTestId("comment-has-content")).toBeNull();
   });
 
-  it("does not show the comment text as a header preview", async () => {
+  it("does not show the input until the row is pressed", async () => {
+    await renderPanel(makeContext(null));
+
+    expect(screen.queryByLabelText("Comment")).toBeNull();
+  });
+
+  it("opens the popup with the input when the row is pressed", async () => {
     await renderPanel(makeContext("Lunch with team"));
 
-    // The text appears only in the textarea, not as a header description.
-    expect(screen.queryAllByText("Lunch with team")).toHaveLength(0);
-    expect(screen.getByDisplayValue("Lunch with team")).toBeTruthy();
+    await openPopup();
+
+    expect(screen.getByLabelText("Comment").props.value).toBe("Lunch with team");
+  });
+
+  it("uses a single-line input with a done return key", async () => {
+    await renderPanel(makeContext(null));
+    await openPopup();
+
+    const input = screen.getByLabelText("Comment");
+    expect(input.props.multiline).toBe(false);
+    expect(input.props.returnKeyType).toBe("done");
+  });
+
+  it("writes the typed text to context", async () => {
+    const ctx = makeContext(null);
+    await renderPanel(ctx);
+    await openPopup();
+
+    await act(async () => {
+      fireEvent.changeText(screen.getByLabelText("Comment"), "New comment");
+    });
+    expect(ctx.setComment).toHaveBeenCalledWith("New comment");
   });
 
   it("clears the comment when Clear is pressed", async () => {
     const ctx = makeContext("Lunch with team");
     await renderPanel(ctx);
+    await openPopup();
 
     await fireEvent.press(screen.getByRole("button", { name: "Clear" }));
     expect(ctx.setComment).toHaveBeenCalledWith(null);
@@ -96,37 +132,27 @@ describe("CommentPanel", () => {
   it("disables Clear when there is no comment", async () => {
     const ctx = makeContext(null);
     await renderPanel(ctx);
+    await openPopup();
 
     await fireEvent.press(screen.getByRole("button", { name: "Clear" }));
     expect(ctx.setComment).not.toHaveBeenCalled();
   });
 
-  it("uses a single-line input with a done return key", async () => {
-    await renderPanel(makeContext(null));
+  it("closes the popup when Done is pressed", async () => {
+    await renderPanel(makeContext("Lunch"));
+    await openPopup();
 
-    const input = screen.getByLabelText("Comment");
-    expect(input.props.multiline).toBe(false);
-    expect(input.props.returnKeyType).toBe("done");
+    await fireEvent.press(screen.getByRole("button", { name: "Done" }));
+
+    expect(screen.queryByLabelText("Comment")).toBeNull();
   });
 
-  it("collapses the panel when the return key is pressed", async () => {
+  it("closes the popup when the return key is pressed", async () => {
     await renderPanel(makeContext("Lunch"));
+    await openPopup();
 
     await fireEvent(screen.getByLabelText("Comment"), "submitEditing");
 
-    expect(
-      screen.getByRole("button", { name: /^Comment/ }).props.accessibilityState
-        .expanded,
-    ).toBe(false);
-  });
-
-  it("writes the typed text to context", async () => {
-    const ctx = makeContext(null);
-    await renderPanel(ctx);
-
-    await act(async () => {
-      fireEvent.changeText(screen.getByLabelText("Comment"), "New comment");
-    });
-    expect(ctx.setComment).toHaveBeenCalledWith("New comment");
+    expect(screen.queryByLabelText("Comment")).toBeNull();
   });
 });
